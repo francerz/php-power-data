@@ -29,6 +29,10 @@ class Arrays
     }
     static public function keyInsensitive(array $array, string $key)
     {
+        if (array_key_exists($key, $array)) {
+            return $key;
+        }
+
         $ikey = strtolower($key);
         foreach ($array as $k => $v) {
             if (strtolower($k) == $ikey) {
@@ -39,6 +43,10 @@ class Arrays
     }
     static public function valueKeyInsensitive(array $array, string $key)
     {
+        if (array_key_exists($key, $array)) {
+            return $array[$key];
+        }
+
         $ikey = strtolower($key);
         foreach ($array as $k => $v) {
             if (strtolower($k) == $ikey) {

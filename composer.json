@@ -7,7 +7,7 @@
         }
     ],
     "scripts" : {
-        "tests": "phpunit tests"
+        "test": "vendor/bin/phpunit"
     },
     "autoload": {
         "psr-4": {

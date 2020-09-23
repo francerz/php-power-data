@@ -31,5 +31,13 @@ class FunctionsTest extends TestCase
                 stdClass::class
             )
         );
+
+        $this->assertTrue(
+            Functions::testSignature(
+                function(FunctionsTest $a) : FunctionsTest { return $a; },
+                [TestCase::class],
+                TestCase::class
+            )
+        );
     }
 }

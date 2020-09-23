@@ -14,17 +14,25 @@ class Functions
             return false;
         }
         foreach ($args as $i => $argType) {
-            if ($params[$i]->getType()->getName() != $argType) {
-                return false;
+            $paramType = $params[$i]->getType()->getName();
+            if ($paramType === $argType) continue;
+            if (class_exists($paramType) && is_subclass_of($paramType, $argType)) {
+                continue;
             }
+            return false;
         }
         $rt = $rf->getReturnType();
         if ($retType !== 'void') {
             if ($rt == null) {
                 return false;
             }
-            if ($rt->getName() != $retType) {
-                return false;
+            $rtName = $rt->getName();
+            if ($rtName !== $retType) {
+                $return = false;
+                if (class_exists($rtName) && is_subclass_of($rtName, $retType)) {
+                    $return = true;
+                }
+                if (!$return) return false;
             }
         } elseif ($rt != null) {
             return false;

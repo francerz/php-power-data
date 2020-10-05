@@ -1,7 +1,6 @@
 {
     "name": "francerz/php-power-data",
     "description": "PHP data structures for complex data handling",
-    "version": "0.1.0",
     "authors": [
         {
             "name": "Fran CZ"

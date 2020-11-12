@@ -159,4 +159,46 @@ class ArraysTest extends TestCase
         $this->assertEquals(67, Arrays::valueKeyInsensitive($input,'C'));
         $this->assertEquals(67, Arrays::valueKeyInsensitive($input,'c'));
     }
+
+
+    public function testNest()
+    {
+        $groups = array(
+            ['group_id'=>'1', 'signature'=>'Programming basics'],
+            ['group_id'=>'2', 'signature'=>'Computing maths']
+        );
+        $students = array(
+            ['student_id'=>'1', 'name'=>'John Doe', 'group_id'=>'1'],
+            ['student_id'=>'2', 'name'=>'Jane Doe', 'group_id'=>'2'],
+            ['student_id'=>'3', 'name'=>'James Doe', 'group_id'=>'2'],
+                ['student_id'=>'4', 'name'=>'Judy Doe', 'group_id'=>'1']
+        );
+
+        $expected = array(
+            ['group_id'=>'1', 'signature'=>'Programming basics', 'Students'=>array(
+                ['student_id'=>'1', 'name'=>'John Doe', 'group_id'=>'1'],
+                ['student_id'=>'4', 'name'=>'Judy Doe', 'group_id'=>'1']
+            )],
+            ['group_id'=>'2', 'signature'=>'Computing maths', 'Students'=>array(
+                ['student_id'=>'2', 'name'=>'Jane Doe', 'group_id'=>'2'],
+                ['student_id'=>'3', 'name'=>'James Doe', 'group_id'=>'2']
+            )]
+        );
+
+        $groups_students = Arrays::nest($groups, $students, 'Students', function($group, $student) {
+            return $group['group_id'] == $student['group_id'];
+        });
+
+        $this->assertEquals($expected, $groups_students);
+
+        $groups_obj = json_decode(json_encode($groups));
+        $students_obj = json_decode(json_encode($students));
+        $expected_obj = json_decode(json_encode($expected));
+
+        $groups_students_obj = Arrays::nest($groups_obj, $students_obj, 'Students', function($group, $student) {
+            return $group->group_id == $student->group_id;
+        });
+
+        $this->assertEquals($expected_obj, $groups_students_obj);
+    }
 }

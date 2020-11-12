@@ -55,4 +55,21 @@ class Arrays
         }
         return null;
     }
+    static public function nest(array $array1, array $array2, string $name, callable $compare)
+    {
+        foreach($array1 as &$v1) {
+            $matches = [];
+            foreach ($array2 as &$v2) {
+                if ($compare($v1, $v2)) {
+                    $matches[] = $v2;
+                }
+            }
+            if (is_object($v1)) {
+                $v1->$name = $matches;
+            } elseif (is_array($v2)) {
+                $v1[$name] = $matches;
+            }
+        }
+        return $array1;
+    }
 }

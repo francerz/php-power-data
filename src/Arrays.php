@@ -1,6 +1,9 @@
 <?php
 namespace Francerz\PowerData;
 
+use LogicException;
+use Traversable;
+
 class Arrays
 {
     static public function hasNumericKeys(array $array)
@@ -11,11 +14,50 @@ class Arrays
     {
         return count(array_filter($array, 'is_string', ARRAY_FILTER_USE_KEY)) > 0;
     }
+    static public function findKeys(array $array, string $pattern)
+    {
+        return array_filter($array, function($k) use ($pattern) {
+            return preg_match($pattern, $k);
+        }, ARRAY_FILTER_USE_KEY);
+    }
     static public function remove(array &$array, $value)
     {
         $array = array_filter($array, function($v) use ($value) {
             return ($v !== $value);
         });
+    }
+
+    static public function filter($array, ?callable $callback = null, int $flag = 0)
+    {
+        if (is_array($array)) {
+            return array_filter($array, $callback, $flag);
+        }
+        if (!$array instanceof Traversable) {
+            throw new LogicException('Invalid array for filter, must be array or Traversable');
+        }
+        $new = [];
+        if (is_null($callback)) {
+            foreach ($array as $k => $v) {
+                if ($v) $new[$k] = $v;
+            }
+            return $new;
+        }
+        switch ($flag) {
+            case ARRAY_FILTER_USE_KEY:
+                foreach ($array as $k => $v) {
+                    if ($callback($k)) $new[$k] = $v;
+                }
+                return $new;
+            case ARRAY_FILTER_USE_BOTH:
+                foreach ($array as $k => $v) {
+                    if ($callback($v, $k)) $new[$k] = $v;
+                }
+                return $new;
+        }
+        foreach ($array as $k => $v) {
+            if ($callback($v)) $new[$k] = $v;
+        }
+        return $new;
     }
     static public function intersect(array $array1, array $array2, ...$_)
     {

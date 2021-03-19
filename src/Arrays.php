@@ -114,4 +114,16 @@ class Arrays
         }
         return $array1;
     }
+
+    public static function index(array $values)
+    {
+        $index = [];
+        foreach ($values as $k => $v) {
+            if (!isset($index[$v])) {
+                $index[$v] = [];
+            }
+            $index[$v][] = $k;
+        }
+        return $index;
+    }
 }

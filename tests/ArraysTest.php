@@ -201,4 +201,26 @@ class ArraysTest extends TestCase
 
         $this->assertEquals($expected_obj, $groups_students_obj);
     }
+
+    public function testIndex()
+    {
+        $data = array(
+            0 => '1',
+            1 => '1',
+            3 => '2',
+            4 => '3',
+            5 => '2',
+            9 => '1'
+        );
+
+        $expected = array(
+            '1' => [0, 1, 9],
+            '2' => [3, 5],
+            '3' => [4]
+        );
+
+        $actual = Arrays::index($data);
+
+        $this->assertEquals($expected, $actual);
+    }
 }

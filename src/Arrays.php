@@ -126,4 +126,17 @@ class Arrays
         }
         return $index;
     }
+
+    public static function replaceKeys(array $array, array $keys, array $newKeys)
+    {
+        if (count($keys) != count($newKeys)) {
+            throw new LogicException('Params $keys and $newKeys must have same length.');
+        }
+        $keys = array_combine($keys, $newKeys);
+        $new = [];
+        foreach ($keys as $k => $n) {
+            $new[$n] = array_key_exists($k, $array) ? $array[$k] : null;
+        }
+        return $new;
+    }
 }

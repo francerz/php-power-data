@@ -223,4 +223,33 @@ class ArraysTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    public function testReplaceKeys()
+    {
+        $array = array(
+            0 => '0',
+            1 => '1',
+            '2' => '2',
+            'three' => '3',
+            'four' => 'four'
+        );
+
+        $replaces = array(
+            0 => 0,
+            '2' => 2,
+            'three' => 3,
+            'four' => 4
+        );
+
+        $expected = array(
+            0 => '0',
+            2 => '2',
+            3 => '3',
+            4 => 'four'
+        );
+
+        $actual = Arrays::replaceKeys($array, array_keys($replaces), array_values($replaces));
+
+        $this->assertEquals($expected, $actual);
+    }
 }

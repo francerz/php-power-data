@@ -18,6 +18,7 @@ class Index
 
     public function reindex()
     {
+        $this->indexes = array_fill_keys($this->columns, []);
         foreach ($this->rows as $k => $row) {
             $row = (array)$row;
             foreach ($this->columns as $col) {

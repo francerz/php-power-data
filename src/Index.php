@@ -33,13 +33,14 @@ class Index
 
         if (empty($filter)) return $keys;
 
+        $ks = [];
         foreach ($filter as $k => $v) {
             $index = $this->indexes[$k];
-            $ks = $index[$v] ?? [];
-            $keys = array_intersect($keys, $ks);
+            $ks[] = $index[$v] ?? [];
         }
+        $keys = array_intersect($keys, ...$ks);
 
-        return array_values($keys);
+        return $keys;
     }
 
     public function findAll(array $filter) : array

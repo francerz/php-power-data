@@ -2,7 +2,10 @@
 
 namespace Francerz\PowerData;
 
-class Index
+use ArrayAccess;
+use Exception;
+
+class Index implements ArrayAccess
 {
     private $rows = [];
     private $columns = [];
@@ -50,5 +53,31 @@ class Index
 
         $keys = $this->findAllKeys($filter);
         return array_intersect_key($this->rows, $keys);
+    }
+
+    public function offsetExists($offset)
+    {
+        if (is_array($offset)) {
+            return count($this->findAllKeys($offset)) > 0;
+        }
+        return false;
+    }
+
+    public function offsetGet($offset)
+    {
+        if (is_array($offset)) {
+            return $this->findAll($offset);
+        }
+        return [];
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        throw new Exception("Read only collection.");
+    }
+
+    public function offsetUnset($offset)
+    {
+        throw new Exception("Read only collection.");
     }
 }

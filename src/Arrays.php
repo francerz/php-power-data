@@ -127,12 +127,14 @@ class Arrays
         return $index;
     }
 
-    public static function replaceKeys(array $array, array $keys, array $newKeys)
+    public static function replaceKeys(array $array, array $keys, ?array $newKeys = null)
     {
-        if (count($keys) != count($newKeys)) {
+        if (isset($newKeys) && count($keys) != count($newKeys)) {
             throw new LogicException('Params $keys and $newKeys must have same length.');
         }
-        $keys = array_combine($keys, $newKeys);
+        
+        $keys = isset($newKeys) ? array_combine($keys, $newKeys) : $keys;
+
         $new = [];
         foreach ($keys as $k => $n) {
             $new[$n] = array_key_exists($k, $array) ? $array[$k] : null;

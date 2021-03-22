@@ -249,7 +249,9 @@ class ArraysTest extends TestCase
         );
 
         $actual = Arrays::replaceKeys($array, array_keys($replaces), array_values($replaces));
-
+        $this->assertEquals($expected, $actual);
+        
+        $actual = Arrays::replaceKeys($array, $replaces);
         $this->assertEquals($expected, $actual);
     }
 }

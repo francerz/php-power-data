@@ -3,9 +3,10 @@
 namespace Francerz\PowerData;
 
 use ArrayAccess;
+use Countable;
 use Exception;
 
-class Index implements ArrayAccess
+class Index implements ArrayAccess, Countable
 {
     private $rows = [];
     private $columns = [];
@@ -119,5 +120,10 @@ class Index implements ArrayAccess
     public function offsetUnset($offset)
     {
         throw new Exception("Read only collection.");
+    }
+
+    public function count()
+    {
+        return count($this->rows);
     }
 }

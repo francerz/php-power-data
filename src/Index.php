@@ -5,6 +5,7 @@ namespace Francerz\PowerData;
 use ArrayAccess;
 use Countable;
 use Exception;
+use JsonSerializable;
 
 class Index implements ArrayAccess, Countable
 {
@@ -125,5 +126,15 @@ class Index implements ArrayAccess, Countable
     public function count()
     {
         return count($this->rows);
+    }
+
+    public function getRows()
+    {
+        return $this->rows;
+    }
+
+    public function getColumns()
+    {
+        return $this->columns;
     }
 }

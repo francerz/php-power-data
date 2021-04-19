@@ -137,4 +137,12 @@ class Index implements ArrayAccess, Countable
     {
         return $this->columns;
     }
+
+    public function getColumnValues(string $column)
+    {
+        if (!array_key_exists($column, $this->indexes)) {
+            return [];
+        }
+        return array_unique(array_keys($this->indexes[$column]));
+    }
 }

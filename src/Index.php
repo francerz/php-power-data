@@ -19,16 +19,49 @@ class Index implements ArrayAccess
         $this->reindex();
     }
 
+    private function indexColumn(string $col)
+    {
+        if (array_key_exists($col, $this->columns)) {
+            throw new Exception(sprintf('Column %s already exists.', $col));
+        }
+        foreach ($this->rows as $k => $row) {
+            $row = (array)$row;
+            $v = array_key_exists($col, $row) ? $row[$col] : null;
+            $this->indexes[$col][$v][] = $k;
+        }
+        $this->columns[] = $col;
+    }
+
+    private function indexRow(array $row, int $k)
+    {
+        foreach ($this->columns as $col) {
+            $v = array_key_exists($col, $row) ? $row[$col] : null;
+            $this->indexes[$col][$v][] = $k;
+        }
+    }
+
     public function reindex()
     {
         $this->indexes = array_fill_keys($this->columns, []);
         foreach ($this->rows as $k => $row) {
-            $row = (array)$row;
-            foreach ($this->columns as $col) {
-                $v = array_key_exists($col, $row) ? $row[$col] : null;
-                $this->indexes[$col][$v][] = $k;
-            }
+            $this->indexRow((array)$row, $k);
         }
+    }
+
+    public function add($item)
+    {
+        if (!is_object($item) && !is_array($item)) {
+            throw new Exception(sprintf('Invalid $item type %s, only object or array accepted.', gettype($item)));
+        }
+        $this->rows[] = $item;
+        $k = array_key_last($this->rows);
+        $row = (array)$item;
+        $this->indexRow($row, $k);
+    }
+
+    public function addColumn(string $column)
+    {
+        $this->indexColumn($column);
     }
 
     public function findAllKeys(array $filter) : array
@@ -60,6 +93,10 @@ class Index implements ArrayAccess
         if (is_array($offset)) {
             return count($this->findAllKeys($offset)) > 0;
         }
+        if (is_int($offset)) {
+            return array_key_exists($offset, $this->rows) ?
+                $this->rows[$offset] : null;
+        }
         return false;
     }
 
@@ -73,7 +110,10 @@ class Index implements ArrayAccess
 
     public function offsetSet($offset, $value)
     {
-        throw new Exception("Read only collection.");
+        if (!is_null($offset)) {
+            throw new Exception('Unsupported $offset set.');
+        }
+        $this->add($value);
     }
 
     public function offsetUnset($offset)

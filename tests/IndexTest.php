@@ -40,4 +40,28 @@ class IndexTest extends TestCase
         $this->assertEquals([2], array_values($index->findAllKeys(['col1'=>3,'col2'=>2])));
         $this->assertEquals([], array_values($index->findAllKeys(['col1'=>4,'col2'=>2])));
     }
+
+    public function testMutableIndex()
+    {
+        $index = new Index(array(
+            ['col1'=>1, 'col2'=>1], # 0
+            ['col1'=>2, 'col2'=>2], # 1
+            ['col1'=>3, 'col2'=>2], # 2
+            ['col1'=>4, 'col2'=>1], # 3
+        ), ['col1']);
+
+        $index->add(['col1'=>5, 'col2'=>3]); # 4
+
+        $this->assertEquals([0], array_values($index->findAllKeys(['col1'=>1])));
+        $this->assertEquals([1], array_values($index->findAllKeys(['col1'=>2])));
+        $this->assertEquals([2], array_values($index->findAllKeys(['col1'=>3])));
+        $this->assertEquals([3], array_values($index->findAllKeys(['col1'=>4])));
+        $this->assertEquals([4], array_values($index->findAllKeys(['col1'=>5])));
+
+        $index->addColumn('col2');
+
+        $this->assertEquals([0,3], array_values($index->findAllKeys(['col2'=>1])));
+        $this->assertEquals([1,2], array_values($index->findAllKeys(['col2'=>2])));
+        $this->assertEquals([4], array_values($index->findAllKeys(['col2'=>3])));
+    }
 }

@@ -5,9 +5,12 @@ use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
 {
-    public function testFindAllKeys()
+    private $index;
+
+    public function __construct()
     {
-        $index = new Index(array(
+        parent::__construct();
+        $this->index = new Index(array(
             ['col1'=>1, 'col2'=>1], # 0
             ['col1'=>2, 'col2'=>2], # 1
             ['col1'=>3, 'col2'=>2], # 2
@@ -17,6 +20,10 @@ class IndexTest extends TestCase
             ['col1'=>7, 'col2'=>2], # 6
             ['col1'=>8, 'col2'=>1], # 7
         ),['col1','col2']);
+    }
+    public function testFindAllKeys()
+    {
+        $index = $this->index;
 
         $this->assertEquals([], array_values($index->findAllKeys(['col1'=>0])));
         $this->assertEquals([0], array_values($index->findAllKeys(['col1'=>1])));
@@ -68,5 +75,15 @@ class IndexTest extends TestCase
 
         $this->assertEquals([1,2,3], $index->getColumnValues('col2'));
         $this->assertEmpty($index->getColumnValues('col3'));
+    }
+
+    public function testGroupBy()
+    {
+        $groups = $this->index->groupBy('col2');
+
+        $this->assertEquals(4, count($groups));
+        $this->assertEquals(8, max(array_column($groups[1], 'col1')) );
+        $this->assertEquals(7, max(array_column($groups[2], 'col1')) );
+        $this->assertEquals(6, max(array_column($groups[3], 'col1')) );
     }
 }

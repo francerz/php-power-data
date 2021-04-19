@@ -145,4 +145,13 @@ class Index implements ArrayAccess, Countable
         }
         return array_unique(array_keys($this->indexes[$column]));
     }
+
+    public function groupBy(string $column)
+    {
+        $groups = [];
+        foreach ($this->getColumnValues($column) as $v) {
+            $groups[$v] = $this[[$column=>$v]];
+        }
+        return $groups;
+    }
 }

@@ -141,4 +141,17 @@ class Arrays
         }
         return $new;
     }
+
+    public static function fromIterable(iterable $iterable) : array
+    {
+        if (is_array($iterable)) {
+            return $iterable;
+        }
+        
+        $array = [];
+        foreach ($iterable as $key => $value) {
+            $array[$key] = $value;
+        }
+        return $array;
+    }
 }

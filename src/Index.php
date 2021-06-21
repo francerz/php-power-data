@@ -5,18 +5,26 @@ namespace Francerz\PowerData;
 use ArrayAccess;
 use Countable;
 use Exception;
+use Iterator;
 use JsonSerializable;
 
-class Index implements ArrayAccess, Countable
+class Index implements ArrayAccess, Countable, Iterator
 {
     private $rows = [];
     private $columns = [];
 
     private $indexes = [];
 
-    public function __construct(array $rows, array $columns)
+    /**
+     * Creates an Indexed iterable, array access and countable object
+     *
+     * @param iterable $iterable Rows that should be indexed.
+     * @param array $columns Columns that match the indexes.
+     */
+    public function __construct(iterable $iterable, array $columns)
     {
-        $this->rows = $rows;
+        $this->iterable = $iterable;
+        $this->rows = Arrays::fromIterable($iterable);
         $this->columns = $columns;
         $this->reindex();
     }
@@ -42,6 +50,13 @@ class Index implements ArrayAccess, Countable
         }
     }
 
+    /**
+     * Rebuilds the indexes.
+     * 
+     * Using this inside a loop might cause slow performance.
+     * 
+     * @return void
+     */
     public function reindex()
     {
         $this->indexes = array_fill_keys($this->columns, []);
@@ -50,6 +65,12 @@ class Index implements ArrayAccess, Countable
         }
     }
 
+    /**
+     * Adds an item and index it.
+     *
+     * @param mixed $item
+     * @return void
+     */
     public function add($item)
     {
         if (!is_object($item) && !is_array($item)) {
@@ -62,7 +83,7 @@ class Index implements ArrayAccess, Countable
     }
 
     public function addColumn(string $column)
-    {
+    { 
         $this->indexColumn($column);
     }
 
@@ -126,6 +147,27 @@ class Index implements ArrayAccess, Countable
     public function count()
     {
         return count($this->rows);
+    }
+
+    public function rewind()
+    {
+        return reset($this->rows);
+    }
+    public function valid()
+    {
+        return key($this->rows) !== null;
+    }
+    public function next()
+    {
+        return next($this->rows);
+    }
+    public function key()
+    {
+        return key($this->rows);
+    }
+    public function current()
+    {
+        return current($this->rows);
     }
 
     public function getRows()

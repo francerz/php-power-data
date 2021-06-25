@@ -95,20 +95,19 @@ class Index implements ArrayAccess, Countable, Iterator
 
         $ks = [];
         foreach ($filter as $k => $v) {
-            $index = $this->indexes[$k];
+            $index = $this->indexes[$k] ?? [];
             $ks[] = $index[$v] ?? [];
         }
-        $keys = array_intersect($keys, ...$ks);
 
-        return $keys;
+        if (count($ks) < 2) return reset($ks);
+        return call_user_func_array('array_intersect', $ks);
     }
 
     public function findAll(array $filter) : array
     {
         if (empty($filter)) return $this->rows;
-
-        $keys = $this->findAllKeys($filter);
-        return array_intersect_key($this->rows, $keys);
+        
+        return array_intersect_key($this->rows, array_flip($this->findAllKeys($filter)));
     }
 
     public function offsetExists($offset)

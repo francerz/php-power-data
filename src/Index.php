@@ -46,7 +46,7 @@ class Index implements ArrayAccess, Countable, Iterator
     {
         foreach ($this->columns as $col) {
             $v = array_key_exists($col, $row) ? $row[$col] : null;
-            $this->indexes[$col][$v][] = $k;
+            $this->indexes[$col][$v][$k] = $k;
         }
     }
 
@@ -100,7 +100,7 @@ class Index implements ArrayAccess, Countable, Iterator
         }
 
         if (count($ks) < 2) return reset($ks);
-        return call_user_func_array('array_intersect', $ks);
+        return call_user_func_array('array_intersect_key', $ks);
     }
 
     public function findAll(array $filter) : array

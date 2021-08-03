@@ -101,7 +101,7 @@ class Index implements ArrayAccess, Countable, Iterator
         $ks = [];
         foreach ($filter as $k => $v) {
             $index = $this->indexes[$k] ?? [];
-            $ks[] = $index[$v] ?? [];
+            $ks[] = $index[$v] ?? SortedIndex::newEmpty();
         }
 
         if (count($ks) < 2) {

@@ -92,4 +92,13 @@ class SortedIndex implements Countable, Iterator
         }
         return array_values($base);
     }
+
+    private static $_empty;
+    public static function newEmpty() : SortedIndex
+    {
+        if (!isset(static::$_empty)) {
+            static::$_empty = new static([]);
+        }
+        return static::$_empty;
+    }
 }

@@ -63,6 +63,11 @@ class Index implements ArrayAccess, Countable, Iterator
         foreach ($this->rows as $k => $row) {
             $this->indexRow((array)$row, $k);
         }
+        foreach ($this->indexes as &$index) {
+            foreach ($index as $k => &$v) {
+                $v = new SortedIndex($v);
+            }
+        }
     }
 
     /**
@@ -99,7 +104,13 @@ class Index implements ArrayAccess, Countable, Iterator
             $ks[] = $index[$v] ?? [];
         }
 
-        if (count($ks) < 2) return reset($ks);
+        if (count($ks) < 2) {
+            $ret = reset($ks);
+            return Arrays::fromIterable($ret);
+        }
+
+        return call_user_func_array([SortedIndex::class,'intersect'], $ks);
+
         return call_user_func_array('array_intersect_key', $ks);
     }
 

@@ -142,15 +142,22 @@ class Arrays
         return $new;
     }
 
-    public static function fromIterable(iterable $iterable) : array
+    public static function fromIterable(iterable $iterable, $keepKeys = true) : array
     {
         if (is_array($iterable)) {
             return $iterable;
         }
         
         $array = [];
-        foreach ($iterable as $key => $value) {
-            $array[$key] = $value;
+        if ($keepKeys) {
+            foreach ($iterable as $key => $value) {
+                $array[$key] = $value;
+            }
+            return $array;
+        }
+
+        foreach ($iterable as $value) {
+            $array[] = $value;
         }
         return $array;
     }

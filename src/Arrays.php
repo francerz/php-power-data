@@ -6,6 +6,9 @@ use Traversable;
 
 class Arrays
 {
+    const NEST_COLLECTION = 0;
+    const NEST_SINGLE_FIRST = 1;
+    const NEST_SINGLE_LAST = 2;
     static public function hasNumericKeys(array $array)
     {
         return count(array_filter($array, 'is_numeric', ARRAY_FILTER_USE_KEY)) > 0;
@@ -97,7 +100,19 @@ class Arrays
         }
         return null;
     }
-    static public function nest(array $array1, array $array2, string $name, callable $compare)
+    static public function nest(array $array1, array $array2, string $name, callable $compare, $mode = self::NEST_COLLECTION)
+    {
+        switch ($mode) {
+            case self::NEST_COLLECTION: default:
+                return static::nest_collection($array1, $array2, $name, $compare);
+            case self::NEST_SINGLE_FIRST:
+                return static::nest_single_first($array1, $array2, $name, $compare);
+            case self::NEST_SINGLE_LAST:
+                return static::nest_single_last($array1, $array2, $name, $compare);
+        }
+        return null;
+    }
+    static public function nest_collection(array $array1, array $array2, string $name, callable $compare)
     {
         foreach($array1 as &$v1) {
             $matches = [];
@@ -108,11 +123,36 @@ class Arrays
             }
             if (is_object($v1)) {
                 $v1->$name = $matches;
-            } elseif (is_array($v2)) {
+            } elseif (is_array($v1)) {
                 $v1[$name] = $matches;
             }
         }
         return $array1;
+    }
+
+    public static function nest_single_first(array $array1, array $array2, string $name, callable $compare)
+    {
+        foreach ($array1 as &$v1) {
+            $match = null;
+            foreach ($array2 as &$v2) {
+                if ($compare($v1, $v2)) {
+                    $match = $v2;
+                    break;
+                }
+            }
+            if (is_object($v1)) {
+                $v1->$name = $match;
+            } elseif (is_array($v1)) {
+                $v1[$name] = $match;
+            }
+        }
+        return $array1;
+    }
+
+    public static function nest_single_last(array $array1, array $array2, string $name, callable $compare)
+    {
+        $array2 = array_reverse($array2);
+        return static::nest_single_first($array1, $array2, $name, $compare);
     }
 
     public static function index(array $values)

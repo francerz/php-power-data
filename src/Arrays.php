@@ -100,19 +100,20 @@ class Arrays
         }
         return null;
     }
-    static public function nest(array $array1, array $array2, string $name, callable $compare, $mode = self::NEST_COLLECTION)
+    public static function nest(array $array1, array $array2, string $name, callable $compare, $mode = self::NEST_COLLECTION)
     {
         switch ($mode) {
             case self::NEST_COLLECTION: default:
-                return static::nest_collection($array1, $array2, $name, $compare);
+                return static::nestCollection($array1, $array2, $name, $compare);
             case self::NEST_SINGLE_FIRST:
-                return static::nest_single_first($array1, $array2, $name, $compare);
+                return static::nestSingleFirst($array1, $array2, $name, $compare);
             case self::NEST_SINGLE_LAST:
-                return static::nest_single_last($array1, $array2, $name, $compare);
+                $array2 = array_reverse($array2, true);
+                return static::nestSingleFirst($array1, $array2, $name, $compare);
         }
         return null;
     }
-    static public function nest_collection(array $array1, array $array2, string $name, callable $compare)
+    private static function nestCollection(array $array1, array $array2, string $name, callable $compare)
     {
         foreach($array1 as &$v1) {
             $matches = [];
@@ -130,7 +131,7 @@ class Arrays
         return $array1;
     }
 
-    public static function nest_single_first(array $array1, array $array2, string $name, callable $compare)
+    private static function nestSingleFirst(array $array1, array $array2, string $name, callable $compare)
     {
         foreach ($array1 as &$v1) {
             $match = null;
@@ -147,12 +148,6 @@ class Arrays
             }
         }
         return $array1;
-    }
-
-    public static function nest_single_last(array $array1, array $array2, string $name, callable $compare)
-    {
-        $array2 = array_reverse($array2);
-        return static::nest_single_first($array1, $array2, $name, $compare);
     }
 
     public static function index(array $values)

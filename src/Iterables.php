@@ -50,4 +50,66 @@ abstract class Iterables
         isset($bsort) ? uasort($b, $bsort) : asort($b);
         return array_udiff($a, $b, $comparer);
     }
+
+    const NEST_COLLECTION = 0;
+    const NEST_SINGLE_FIRST = 1;
+    const NEST_SINGLE_LAST = 2;
+    public static function nest(
+        iterable $parents,
+        iterable $children,
+        string $name,
+        callable $compare,
+        $mode = self::NEST_COLLECTION
+    ) {
+        switch ($mode) {
+            case self::NEST_SINGLE_FIRST:
+                return static::nestSingleFirst($parents, $children, $name, $compare);
+            case self::NEST_SINGLE_LAST:
+                $children = array_reverse(Arrays::fromIterable($children));
+                return static::nestSingleFirst($parents, $children, $name, $compare);
+            case self::NEST_COLLECTION: default:
+                return static::nestCollection($parents, $children, $name, $compare);
+        }
+    }
+
+    private static function nestCollection($parents, $children, $name, $compare)
+    {
+        $newParents = [];
+        foreach ($parents as $k => $parent) {
+            $matches = [];
+            foreach ($children as $k2 => $child) {
+                if ($compare($parent, $child)) {
+                    $matches[$k2] = $child;
+                }
+            }
+            if (is_object($parent)) {
+                $parent->$name = $matches;
+            } elseif (is_array($parent)) {
+                $parent[$name] = $matches;
+            }
+            $newParents[$k] = $parent;
+        }
+        return $newParents;
+    }
+
+    private static function nestSingleFirst($parents, $children, $name, $compare)
+    {
+        $newParents = [];
+        foreach ($parents as $k => $parent) {
+            $match = null;
+            foreach ($children as $child) {
+                if ($compare($parent, $child)) {
+                    $match = $child;
+                    break;
+                }
+            }
+            if (is_object($parent)) {
+                $parent->$name = $match;
+            } elseif (is_array($parent)) {
+                $parent[$name] = $match;
+            }
+            $newParents[$k] = $parent;
+        }
+        return $newParents;
+    }
 }

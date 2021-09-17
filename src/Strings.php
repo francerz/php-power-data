@@ -9,4 +9,9 @@ abstract class Strings
         $l = strlen($needle);
         return $l > 0 ? substr($haystack, -$l) === $needle : true;
     }
+
+    public static function startsWith(string $haystack, string $needle)
+    {
+        return strpos($haystack, $needle) === 0;
+    }
 }

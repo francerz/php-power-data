@@ -14,4 +14,9 @@ abstract class Strings
     {
         return strpos($haystack, $needle) === 0;
     }
+
+    public static function contains(string $haystack, string $needle)
+    {
+        return strpos($haystack, $needle) !== false;
+    }
 }

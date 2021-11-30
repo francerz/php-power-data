@@ -1,7 +1,8 @@
 <?php
+
 namespace Francerz\PowerData;
 
-class Multimap 
+class Multimap
 {
     private $map;
 

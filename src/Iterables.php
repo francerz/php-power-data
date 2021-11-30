@@ -74,9 +74,9 @@ abstract class Iterables
         return array_udiff($a, $b, $comparer);
     }
 
-    const NEST_COLLECTION = 0;
-    const NEST_SINGLE_FIRST = 1;
-    const NEST_SINGLE_LAST = 2;
+    public const NEST_COLLECTION = 0;
+    public const NEST_SINGLE_FIRST = 1;
+    public const NEST_SINGLE_LAST = 2;
     public static function nest(
         iterable $parents,
         iterable $children,

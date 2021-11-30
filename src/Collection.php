@@ -1,4 +1,5 @@
 <?php
+
 namespace Francerz\PowerData;
 
 use Exception;
@@ -66,7 +67,7 @@ class Collection implements
         return count($this->data);
     }
     #endregion
-    
+
     #region \Iterator implementation
     public function current()
     {
@@ -92,26 +93,24 @@ class Collection implements
 
     private function offsetGetArray(array $offset)
     {
-        if (empty($offset)){
+        if (empty($offset)) {
             throw new InvalidOffsetException('Collection->offsetGetArray(): empty offset not allowed.');
         }
         if (Arrays::hasNumericKeys($offset)) {
             throw new InvalidOffsetException('Collection->offsetGetArray(): offset must not contain numeric keys.');
         }
-        
     }
     public function filter(callable $callback)
     {
         try {
             $data = [];
-            foreach($this as $key => $value)
-            {
+            foreach ($this as $key => $value) {
                 if ($callback($value, $key)) {
                     $data[] = $value;
                 }
             }
             return new Collection($data);
-        } catch(Exception $ex) {
+        } catch (Exception $ex) {
             throw new PowerDataException($ex->getMessage(), 0, $ex);
         }
     }

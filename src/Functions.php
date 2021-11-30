@@ -27,7 +27,9 @@ class Functions
                 break;
             }
             $paramType = $params[$i]->getType()->getName();
-            if ($paramType === $argType) continue;
+            if ($paramType === $argType) {
+                continue;
+            }
             if (class_exists($paramType) && is_subclass_of($paramType, $argType)) {
                 continue;
             }
@@ -47,7 +49,9 @@ class Functions
                 if (class_exists($rtName) && is_subclass_of($rtName, $retType)) {
                     $return = true;
                 }
-                if (!$return) return false;
+                if (!$return) {
+                    return false;
+                }
             }
         } elseif ($rt != null) {
             return false;

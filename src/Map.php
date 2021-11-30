@@ -13,7 +13,7 @@ class Map implements Iterator
         $this->map = array();
     }
 
-    static public function transformKey($key)
+    public static function transformKey($key)
     {
         if (is_array($key)) {
             throw new PowerDataException('Array is not a valid key');

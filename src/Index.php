@@ -56,9 +56,9 @@ class Index implements ArrayAccess, Countable, Iterator
 
     /**
      * Rebuilds the indexes.
-     * 
+     *
      * Using this inside a loop might cause slow performance.
-     * 
+     *
      * @return void
      */
     public function reindex()
@@ -92,7 +92,7 @@ class Index implements ArrayAccess, Countable, Iterator
     }
 
     public function addColumn(string $column)
-    { 
+    {
         $this->indexColumn($column);
     }
 

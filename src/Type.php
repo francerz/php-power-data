@@ -1,4 +1,5 @@
 <?php
+
 namespace Francerz\PowerData;
 
 use Exception;
@@ -7,19 +8,19 @@ class Type
 {
     #region Static Init
     /** @var bool */
-    static private $init = false;
+    private static $init = false;
 
     /** @var array */
-    static private $primitives;
+    private static $primitives;
 
     /** @var array */
-    static private $knownTypesNames;
+    private static $knownTypesNames;
 
     /** @var Tree */
-    static private $knownTypesTree;
+    private static $knownTypesTree;
 
     /** @var array */
-    static private $knownTypes = array(
+    private static $knownTypes = array(
         array(
             'type'      => 'bool',
             'primitive' => true,
@@ -105,7 +106,7 @@ class Type
         )
     );
 
-    static private function staticInit()
+    private static function staticInit()
     {
         if (static::$init) {
             return;
@@ -125,7 +126,9 @@ class Type
         static::$knownTypesTree = Tree::fromArray(
             array_filter(
                 static::$knownTypes,
-                function($v) { return !isset($v['remap']); }
+                function ($v) {
+                    return !isset($v['remap']);
+                }
             ),
             'type',
             'parent'
@@ -137,7 +140,7 @@ class Type
      * @param string $type
      * @return array|null
      */
-    static private function getKnownType(string $type)
+    private static function getKnownType(string $type)
     {
         if (isset(static::$knownTypes[$type])) {
             if (isset(static::$knownTypes[$type]['remap'])) {
@@ -151,7 +154,7 @@ class Type
      * @param string $type
      * @return string|null
      */
-    static private function getKeyKnownType(string $type)
+    private static function getKeyKnownType(string $type)
     {
         if (isset(static::$knownTypes[$type]) && isset(static::$knownTypes[$type]['remap'])) {
             return static::getKeyKnownType(static::$knownTypes[$type]['remap']);
@@ -160,15 +163,15 @@ class Type
     }
     #endregion
 
-    static private $typeCache = [];
-    
+    private static $typeCache = [];
+
     /**
      * @param string $type
      * @param integer|null $depth
      * @param integer|null $maxDepth
      * @return Type
      */
-    public static final function forKey($type, $depth = null, $maxDepth = null)
+    final public static function forKey($type, $depth = null, $maxDepth = null)
     {
         // initialize class static properties.
         static::staticInit();
@@ -198,7 +201,7 @@ class Type
      * @param mixed $value
      * @return Type
      */
-    public static final function of($value)
+    final public static function of($value)
     {
         if (is_array($value)) {
             return static::ofArray($value);
@@ -209,7 +212,7 @@ class Type
         }
         return Type::forKey($type);
     }
-    private static final function ofArray(array $values)
+    final private static function ofArray(array $values)
     {
         $types = [];
         foreach ($values as $val) {
@@ -223,7 +226,7 @@ class Type
      * @param array $types
      * @return Type
      */
-    private static final function getCommonTypeArray(array $types)
+    final private static function getCommonTypeArray(array $types)
     {
         if (count($types) == 0) {
             return static::forKey('mixed');
@@ -246,14 +249,14 @@ class Type
      * @param array $type_keys
      * @return string
      */
-    private static final function getCommonType(array $type_keys)
+    final private static function getCommonType(array $type_keys)
     {
-        $map = static::$knownTypesTree->getMap(function($node) {
+        $map = static::$knownTypesTree->getMap(function ($node) {
             return $node->getValue()['type'];
         });
         $paths = [];
 
-        foreach($type_keys as $k) {
+        foreach ($type_keys as $k) {
             $n = $map->get($k);
             if (is_null($n)) {
                 $n = $map->get('object');
@@ -276,7 +279,7 @@ class Type
      * @param array $types
      * @return array
      */
-    private static final function groupTypes(array $types)
+    final private static function groupTypes(array $types)
     {
         $typeMap = [];
         foreach ($types as $type) {
@@ -298,13 +301,13 @@ class Type
      * @param string $type
      * @return boolean
      */
-    public static final function is($value, string $type)
+    final public static function is($value, string $type)
     {
         $type = static::forKey($type);
         return $type->check($value);
     }
 
-    const TYPE_FORMAT_PATTERN = '/^(?:\\\)?([\\\A-Za-z0-9_]+)((?:\[\])*)$/';
+    public const TYPE_FORMAT_PATTERN = '/^(?:\\\)?([\\\A-Za-z0-9_]+)((?:\[\])*)$/';
 
     private $type;
     private $arrayDepth = 0;
@@ -315,7 +318,7 @@ class Type
      * @param integer $depth
      * @param integer|null $maxDepth
      */
-    private final function __construct($type, $depth = 0, $maxDepth = null)
+    final private function __construct($type, $depth = 0, $maxDepth = null)
     {
         $this->type = $type;
         $this->arrayDepth = $depth;
@@ -334,8 +337,9 @@ class Type
 
     public function isClass()
     {
-        if ($this->isKnownType())
+        if ($this->isKnownType()) {
             return false;
+        }
         return true;
     }
 
@@ -351,15 +355,17 @@ class Type
 
     public function getClassName()
     {
-        if (!$this->isClass())
+        if (!$this->isClass()) {
             return null;
+        }
         return substr($this->type, strrpos($this->type, '\\')+1);
     }
 
     public function getNamespace()
     {
-        if (!$this->isClass())
+        if (!$this->isClass()) {
             return null;
+        }
         return substr($this->type, 0, strrpos($this->type, '\\'));
     }
 
@@ -383,7 +389,7 @@ class Type
         if ($this->isKnownType()) {
             return static::$knownTypes[$this->type]['checkFunc'];
         }
-        return (function($value) {
+        return (function ($value) {
             return $value instanceof $this->type;
         });
     }
@@ -402,8 +408,8 @@ class Type
         if (!is_iterable($value)) {
             return false;
         }
-        foreach($value as $v) {
-            if (!$this->checkArrayRecursive($check, $v, $depth-1)) {
+        foreach ($value as $v) {
+            if (!$this->checkArrayRecursive($check, $v, $depth - 1)) {
                 return false;
             }
         }
@@ -422,8 +428,8 @@ class Type
     public function __toString()
     {
         if (isset($this->arrayMaxDepth)) {
-            return $this->type."[{$this->arrayDepth}-{$this->arrayMaxDepth}]";
+            return $this->type . "[{$this->arrayDepth}-{$this->arrayMaxDepth}]";
         }
-        return $this->type.str_repeat('[]', $this->arrayDepth);
+        return $this->type . str_repeat('[]', $this->arrayDepth);
     }
 }

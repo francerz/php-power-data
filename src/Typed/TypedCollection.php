@@ -1,4 +1,5 @@
 <?php
+
 namespace Francerz\PowerData;
 
 use Exception;

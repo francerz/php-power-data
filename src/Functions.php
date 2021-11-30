@@ -23,12 +23,18 @@ class Functions
             return false;
         }
         foreach ($args as $i => $argType) {
+            if (!method_exists($params[$i], 'getType')) {
+                break;
+            }
             $paramType = $params[$i]->getType()->getName();
             if ($paramType === $argType) continue;
             if (class_exists($paramType) && is_subclass_of($paramType, $argType)) {
                 continue;
             }
             return false;
+        }
+        if (!method_exists($rf, 'getReturnType')) {
+            return true;
         }
         $rt = $rf->getReturnType();
         if ($retType !== 'void') {

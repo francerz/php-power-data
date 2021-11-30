@@ -129,7 +129,7 @@ class ArraysTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testKeyInsensitive() : array
+    public function testKeyInsensitive()
     {
         $input = ['A'=>65, 'B'=> 66, 'C'=>67];
 

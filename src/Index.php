@@ -6,7 +6,6 @@ use ArrayAccess;
 use Countable;
 use Exception;
 use Iterator;
-use JsonSerializable;
 
 class Index implements ArrayAccess, Countable, Iterator
 {
@@ -42,7 +41,12 @@ class Index implements ArrayAccess, Countable, Iterator
         $this->columns[] = $col;
     }
 
-    private function indexRow(array $row, int $k)
+    /**
+     * @param array $row
+     * @param int $k
+     * @return void
+     */
+    private function indexRow(array $row, $k)
     {
         foreach ($this->columns as $col) {
             $v = array_key_exists($col, $row) ? $row[$col] : null;

@@ -191,7 +191,12 @@ class Arrays
         return $new;
     }
 
-    public static function fromIterable(iterable $iterable, $keepKeys = true)
+    /**
+     * @param iterable $iterable
+     * @param boolean $keepKeys
+     * @return void
+     */
+    public static function fromIterable($iterable, $keepKeys = true)
     {
         if (is_array($iterable)) {
             return $iterable;

@@ -18,7 +18,7 @@ class FunctionsTest extends TestCase
 
         $this->assertTrue(
             Functions::testSignature(
-                function(string $a) : string { return $a; },
+                function(string $a) : string{ return $a; },
                 ['string'],
                 'string'
             )
@@ -34,7 +34,7 @@ class FunctionsTest extends TestCase
 
         $this->assertTrue(
             Functions::testSignature(
-                function(FunctionsTest $a) : FunctionsTest { return $a; },
+                function(FunctionsTest $a) : TestCase { return $a; },
                 [TestCase::class],
                 TestCase::class
             )

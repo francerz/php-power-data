@@ -6,7 +6,7 @@ use InvalidArgumentException;
 
 class Objects
 {
-    static public function getHash(object $obj) : string
+    static public function getHash(object $obj)
     {
         return spl_object_hash($obj);
     }

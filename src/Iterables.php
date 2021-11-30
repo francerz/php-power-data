@@ -6,7 +6,15 @@ use LogicException;
 
 abstract class Iterables
 {
-    private static function filterItemColumns($item, array $columns, ?array $replace = null)
+    /**
+     * Undocumented function
+     *
+     * @param array|object|mixed $item
+     * @param array $columns
+     * @param array|null $replace
+     * @return void
+     */
+    private static function filterItemColumns($item, array $columns, $replace = null)
     {
         if (isset($replace) && count($replace) != count($columns)) {
             throw new LogicException('$replace and $columns MUST have same length.');
@@ -21,14 +29,21 @@ abstract class Iterables
             return array_intersect_key($item, array_flip($columns));
         }
         $replace = array_values($replace);
-        $new = []; $i = 0;
+        $new = [];
+        $i = 0;
         foreach ($columns as $cv) {
             $new[$replace[$i++]] = $item[$cv];
         }
         return $new;
     }
 
-    public static function filterColumns(iterable $iterable, array $columns, ?array $replace = null)
+    /**
+     * @param iterable $iterable
+     * @param array $columns
+     * @param array|null $replace
+     * @return void
+     */
+    public static function filterColumns($iterable, array $columns, $replace = null)
     {
         $result = [];
         foreach ($iterable as $item) {
@@ -37,7 +52,15 @@ abstract class Iterables
         return $result;
     }
 
-    public static function diff(iterable $a, iterable $b, ?callable $comparer = null, ?callable $asort = null, ?callable $bsort = null)
+    /**
+     * @param iterable $a
+     * @param iterable $b
+     * @param callable|null $comparer
+     * @param callable|null $asort
+     * @param callable|null $bsort
+     * @return array
+     */
+    public static function diff($a, $b, $comparer = null, $asort = null, $bsort = null)
     {
         $a = Arrays::fromIterable($a);
         $b = Arrays::fromIterable($b);
@@ -67,7 +90,8 @@ abstract class Iterables
             case self::NEST_SINGLE_LAST:
                 $children = array_reverse(Arrays::fromIterable($children));
                 return static::nestSingleFirst($parents, $children, $name, $compare);
-            case self::NEST_COLLECTION: default:
+            case self::NEST_COLLECTION:
+            default:
                 return static::nestCollection($parents, $children, $name, $compare);
         }
     }

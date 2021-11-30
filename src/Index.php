@@ -21,7 +21,7 @@ class Index implements ArrayAccess, Countable, Iterator
      * @param iterable $iterable Rows that should be indexed.
      * @param array $columns Columns that match the indexes.
      */
-    public function __construct(iterable $iterable, array $columns)
+    public function __construct($iterable, array $columns)
     {
         $this->iterable = $iterable;
         $this->rows = Arrays::fromIterable($iterable);
@@ -92,16 +92,22 @@ class Index implements ArrayAccess, Countable, Iterator
         $this->indexColumn($column);
     }
 
-    public function findAllKeys(array $filter) : array
+    /**
+     * @param array $filter
+     * @return array
+     */
+    public function findAllKeys(array $filter)
     {
         $keys = array_keys($this->rows);
 
-        if (empty($filter)) return $keys;
+        if (empty($filter)) {
+            return $keys;
+        }
 
         $ks = [];
         foreach ($filter as $k => $v) {
-            $index = $this->indexes[$k] ?? [];
-            $ks[] = $index[$v] ?? SortedIndex::newEmpty();
+            $index = isset($this->indexes[$k]) ? $this->indexes[$k] : [];
+            $ks[] = isset($index[$v]) ? $index[$v] : SortedIndex::newEmpty();
         }
 
         if (count($ks) < 2) {
@@ -109,15 +115,17 @@ class Index implements ArrayAccess, Countable, Iterator
             return Arrays::fromIterable($ret);
         }
 
-        return call_user_func_array([SortedIndex::class,'intersect'], $ks);
+        return call_user_func([SortedIndex::class,'intersect'], $ks);
 
-        return call_user_func_array('array_intersect_key', $ks);
+        return call_user_func('array_intersect_key', $ks);
     }
 
-    public function findAll(array $filter) : array
+    public function findAll(array $filter)
     {
-        if (empty($filter)) return $this->rows;
-        
+        if (empty($filter)) {
+            return $this->rows;
+        }
+
         return array_intersect_key($this->rows, array_flip($this->findAllKeys($filter)));
     }
 
@@ -202,7 +210,7 @@ class Index implements ArrayAccess, Countable, Iterator
     {
         $groups = [];
         foreach ($this->getColumnValues($column) as $v) {
-            $groups[$v] = $this[[$column=>$v]];
+            $groups[$v] = $this[[$column => $v]];
         }
         return $groups;
     }

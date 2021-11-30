@@ -5,7 +5,8 @@ use Exception;
 
 class Tree
 {
-    private ?TreeNode $root;
+    /** @var TreeNode|null */
+    private $root;
 
     public function __construct()
     {
@@ -15,7 +16,7 @@ class Tree
     {
         $this->root = $root;
     }
-    public function getRoot() : TreeNode
+    public function getRoot()
     {
         return $this->root;
     }
@@ -28,7 +29,8 @@ class Tree
         }
         return null;
     }
-    public static function fromArray(array $array, string $itemKey, string $parentKey) : Tree
+
+    public static function fromArray(array $array, string $itemKey, string $parentKey)
     {
         $tree = new Tree();
         $index = new Map();
@@ -59,17 +61,29 @@ class Tree
 
         return $tree;
     }
-    public function getMap(callable $keyFunction) : Map
+
+    /**
+     * @param callable $keyFunction
+     * @return Map
+     */
+    public function getMap($keyFunction)
     {
         $map = new Map();
         $this->recursiveMap($map, $this->root, $keyFunction);
         return $map;
     }
-    private function recursiveMap(Map $map, TreeNode $node, callable $keyFunction)
+
+    /**
+     * @param Map $map
+     * @param TreeNode $node
+     * @param callable $keyFunction
+     * @return void
+     */
+    private function recursiveMap(Map $map, TreeNode $node, $keyFunction)
     {
         $key = $keyFunction($node);
         $map->add($key, $node);
-        foreach($node->getChildren() as $child) {
+        foreach ($node->getChildren() as $child) {
             $this->recursiveMap($map, $child, $keyFunction);
         }
     }

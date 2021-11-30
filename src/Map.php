@@ -6,7 +6,8 @@ use Iterator;
 
 class Map implements Iterator
 {
-    private array $map;
+    private $map;
+
     public function __construct()
     {
         $this->map = array();

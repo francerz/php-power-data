@@ -10,7 +10,10 @@ class SortedIndex implements Countable, Iterator
     private $list;
     private $sorted = false;
 
-    public function __construct(iterable $list)
+    /**
+     * @param iterable $list
+     */
+    public function __construct($list)
     {
         $this->list = Arrays::fromIterable($list);
     }
@@ -19,7 +22,12 @@ class SortedIndex implements Countable, Iterator
         sort($this->list);
         $this->sorted = true;
     }
-    public function contains($value, ?int &$jumps = null)
+    /**
+     * @param mixed $value
+     * @param integer|null $jumps
+     * @return void
+     */
+    public function contains($value, &$jumps = null)
     {
         if (!$this->sorted) {
             $this->sort();
@@ -57,9 +65,17 @@ class SortedIndex implements Countable, Iterator
         return reset($this->list);
     }
 
-    private static function binarySearch(array $array, $value, int &$jumps = 0)
+    /**
+     * @param array $array
+     * @param mixed $value
+     * @param integer $jumps
+     * @return void
+     */
+    private static function binarySearch(array $array, $value, &$jumps = 0)
     {
-        if (count($array) === 0) return null;
+        if (count($array) === 0) {
+            return null;
+        }
         $start = 0;
         $end = count($array) - 1;
 
@@ -77,16 +93,22 @@ class SortedIndex implements Countable, Iterator
         }
         return null;
     }
-
-    public static function intersect(SortedIndex ... $indexes)
+    /**
+     * @param SortedIndex[] $indexes
+     */
+    public static function intersect($indexes)
     {
-        usort($indexes, function($a, $b) { return count($a)-count($b); });
+        usort($indexes, function ($a, $b) {
+            return count($a) - count($b);
+        });
         $first = array_shift($indexes);
         $base = $first->list;
         foreach ($indexes as $index) {
             $newBase = [];
             foreach ($base as $val) {
-                if ($index->contains($val)) $newBase[] = $val;
+                if ($index->contains($val)) {
+                    $newBase[] = $val;
+                }
             }
             $base = $newBase;
         }
@@ -94,7 +116,10 @@ class SortedIndex implements Countable, Iterator
     }
 
     private static $_empty;
-    public static function newEmpty() : SortedIndex
+    /**
+     * @return static
+     */
+    public static function newEmpty()
     {
         if (!isset(static::$_empty)) {
             static::$_empty = new static([]);

@@ -25,7 +25,7 @@ class SortedIndexTest extends TestCase
         $index0 = new SortedIndex(range(0,5));
         $index1 = new SortedIndex(range(1,10));
         $index2 = new SortedIndex(range(-10,3));
-        $actual = SortedIndex::intersect($index0, $index1, $index2);
+        $actual = SortedIndex::intersect([$index0, $index1, $index2]);
         $this->assertEquals([1,2,3], $actual);
     }
 

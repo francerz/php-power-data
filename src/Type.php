@@ -6,11 +6,20 @@ use Exception;
 class Type
 {
     #region Static Init
-    static private bool $init = false;
-    static private array $primitives;
-    static private array $knownTypesNames;
-    static private Tree $knownTypesTree; 
-    static private array $knownTypes = array(
+    /** @var bool */
+    static private $init = false;
+
+    /** @var array */
+    static private $primitives;
+
+    /** @var array */
+    static private $knownTypesNames;
+
+    /** @var Tree */
+    static private $knownTypesTree;
+
+    /** @var array */
+    static private $knownTypes = array(
         array(
             'type'      => 'bool',
             'primitive' => true,
@@ -98,13 +107,17 @@ class Type
 
     static private function staticInit()
     {
-        if (static::$init) return;
+        if (static::$init) {
+            return;
+        }
 
         static::$knownTypes = array_column(static::$knownTypes, null, 'type');
 
         static::$primitives = array_column(array_filter(
             static::$knownTypes,
-            function($v) { return !empty($v['primitive']); }
+            function ($v) {
+                return !empty($v['primitive']);
+            }
         ), 'type');
 
         static::$knownTypesNames = array_column(static::$knownTypes, 'type');
@@ -120,7 +133,11 @@ class Type
 
         static::$init = true;
     }
-    static private function getKnownType(string $type) : ?array
+    /**
+     * @param string $type
+     * @return array|null
+     */
+    static private function getKnownType(string $type)
     {
         if (isset(static::$knownTypes[$type])) {
             if (isset(static::$knownTypes[$type]['remap'])) {
@@ -130,7 +147,11 @@ class Type
         }
         return null;
     }
-    static private function getKeyKnownType(string $type) : ?string
+    /**
+     * @param string $type
+     * @return string|null
+     */
+    static private function getKeyKnownType(string $type)
     {
         if (isset(static::$knownTypes[$type]) && isset(static::$knownTypes[$type]['remap'])) {
             return static::getKeyKnownType(static::$knownTypes[$type]['remap']);
@@ -140,7 +161,14 @@ class Type
     #endregion
 
     static private $typeCache = [];
-    public static final function for(string $type, int $depth = null, int $maxDepth = null) : Type
+    
+    /**
+     * @param string $type
+     * @param integer|null $depth
+     * @param integer|null $maxDepth
+     * @return Type
+     */
+    public static final function forKey($type, $depth = null, $maxDepth = null)
     {
         // initialize class static properties.
         static::staticInit();
@@ -165,7 +193,12 @@ class Type
         // creates not cached type
         return static::$typeCache[$typeKey] = new static($type, $depth, $maxDepth);
     }
-    public static final function of($value) : Type
+
+    /**
+     * @param mixed $value
+     * @return Type
+     */
+    public static final function of($value)
     {
         if (is_array($value)) {
             return static::ofArray($value);
@@ -174,7 +207,7 @@ class Type
         if ($type == 'object') {
             $type = get_class($value);
         }
-        return Type::for($type);
+        return Type::forKey($type);
     }
     private static final function ofArray(array $values)
     {
@@ -183,12 +216,17 @@ class Type
             $types[] = static::of($val);
         }
         $type = static::getCommonTypeArray($types);
-        return static::for($type->type, $type->arrayDepth + 1, $type->arrayMaxDepth);
+        return static::forKey($type->type, $type->arrayDepth + 1, $type->arrayMaxDepth);
     }
-    private static final function getCommonTypeArray(array $types) : Type
+
+    /**
+     * @param array $types
+     * @return Type
+     */
+    private static final function getCommonTypeArray(array $types)
     {
         if (count($types) == 0) {
-            return static::for('mixed');
+            return static::forKey('mixed');
         }
         $types = array_unique($types);
         if (count($types) == 1) {
@@ -198,12 +236,17 @@ class Type
         if (count($typeGroups) == 1) {
             reset($typeGroups);
             $type = key($typeGroups);
-            return static::for($type, 1);
+            return static::forKey($type, 1);
         }
         $type = static::getCommonType(array_keys($typeGroups));
-        return static::for($type);
+        return static::forKey($type);
     }
-    private static final function getCommonType(array $type_keys) : string
+
+    /**
+     * @param array $type_keys
+     * @return string
+     */
+    private static final function getCommonType(array $type_keys)
     {
         $map = static::$knownTypesTree->getMap(function($node) {
             return $node->getValue()['type'];
@@ -228,7 +271,12 @@ class Type
         }
         return "mixed";
     }
-    private static final function groupTypes(array $types) : array
+
+    /**
+     * @param array $types
+     * @return array
+     */
+    private static final function groupTypes(array $types)
     {
         $typeMap = [];
         foreach ($types as $type) {
@@ -245,9 +293,14 @@ class Type
         return $typeMap;
     }
 
+    /**
+     * @param mixed $value
+     * @param string $type
+     * @return boolean
+     */
     public static final function is($value, string $type)
     {
-        $type = static::for($type);
+        $type = static::forKey($type);
         return $type->check($value);
     }
 
@@ -257,7 +310,12 @@ class Type
     private $arrayDepth = 0;
     private $arrayMaxDepth = null;
 
-    private final function __construct(string $type, int $depth = 0, int $maxDepth = null)
+    /**
+     * @param string $type
+     * @param integer $depth
+     * @param integer|null $maxDepth
+     */
+    private final function __construct($type, $depth = 0, $maxDepth = null)
     {
         $this->type = $type;
         $this->arrayDepth = $depth;
@@ -317,7 +375,10 @@ class Type
         return $this->arrayDepth;
     }
 
-    private function getTypeCheckFunction() : callable
+    /**
+     * @return callable
+     */
+    private function getTypeCheckFunction()
     {
         if ($this->isKnownType()) {
             return static::$knownTypes[$this->type]['checkFunc'];
@@ -327,7 +388,13 @@ class Type
         });
     }
 
-    private function checkArrayRecursive(callable $check, $value, int $depth)
+    /**
+     * @param callable $check
+     * @param mixed $value
+     * @param integer $depth
+     * @return void
+     */
+    private function checkArrayRecursive($check, $value, $depth)
     {
         if ($depth == 0) {
             return $check($value);

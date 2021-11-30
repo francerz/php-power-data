@@ -6,7 +6,16 @@ use ReflectionFunction;
 
 class Functions
 {
-    public static function testSignature(callable $function, array $args = [], ?string $retType = 'void', ?string $name = null) : bool
+    /**
+     * Undocumented function
+     *
+     * @param callable $function
+     * @param array $args
+     * @param string|null $retType
+     * @param string|null $name
+     * @return boolean
+     */
+    public static function testSignature(callable $function, array $args = [], $retType = 'void', $name = null)
     {
         $rf = new ReflectionFunction($function);
         $params = $rf->getParameters();

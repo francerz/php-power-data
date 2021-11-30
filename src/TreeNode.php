@@ -6,8 +6,8 @@ use Exception;
 
 class TreeNode
 {
-    private Tree $tree;
-    private ?TreeNode $parent = null;
+    private $tree;
+    private $parent = null;
     private $value;
     private $children = array();
 
@@ -16,7 +16,7 @@ class TreeNode
         $this->value = $value;
         $this->tree = $tree;
     }
-    public function setParent(TreeNode $newParent) : void
+    public function setParent(TreeNode $newParent)
     {
         if ($this->parent === $newParent) {
             return;
@@ -31,17 +31,17 @@ class TreeNode
         $this->parent = $newParent;
         $this->parent->children[] = $this;
     }
-    public function unsetParent() : void
+    public function unsetParent()
     {
         if (isset($this->parent)) {
             Arrays::remove($this->parent->children, $this);
         }
     }
-    public function getTree() : Tree
+    public function getTree()
     {
         return $this->tree;
     }
-    public function getParent() : TreeNode
+    public function getParent()
     {
         return $this->parent;
     }
@@ -49,20 +49,19 @@ class TreeNode
     {
         return $this->value;
     }
-    public function getChildren() : array
+    public function getChildren()
     {
         return $this->children;
     }
-    public function isLeaf() : bool
+    public function isLeaf()
     {
         return count($this->children) === 0;
     }
-    public function getPathToRoot(): array
+    public function getPathToRoot()
     {
         $path = array();
         $node = $this;
-        do 
-        {
+        do {
             $path[] = $node;
             $node = $node->parent;
         } while ($node != null);

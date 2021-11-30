@@ -8,11 +8,11 @@ class TypeTest extends TestCase
     public function testInvalidType()
     {
         $this->expectException(Exception::class);
-        Type::for("Dos_Uno@_");
+        Type::forKey("Dos_Uno@_");
     }
     public function testInt()
     {
-        $type = Type::for('int');
+        $type = Type::forKey('int');
 
         $this->assertTrue($type->isKnownType());
         $this->assertTrue($type->isPrimitive());
@@ -26,7 +26,7 @@ class TypeTest extends TestCase
     }
     public function testClass()
     {
-        $type = Type::for(Type::class);
+        $type = Type::forKey(Type::class);
 
         $this->assertFalse($type->isKnownType());
         $this->assertFalse($type->isPrimitive());
@@ -42,8 +42,8 @@ class TypeTest extends TestCase
 
     public function testIntArray()
     {
-        $type = Type::for('int[]');
-        $altType = Type::for('int', 1);
+        $type = Type::forKey('int[]');
+        $altType = Type::forKey('int', 1);
 
         $this->assertEquals($type, $altType);
 
@@ -61,8 +61,8 @@ class TypeTest extends TestCase
     }
     public function testStringArray()
     {
-        $type = Type::for('string[]');
-        $altType = Type::for('string', 1);
+        $type = Type::forKey('string[]');
+        $altType = Type::forKey('string', 1);
 
         $this->assertEquals($type, $altType);
 
@@ -80,8 +80,8 @@ class TypeTest extends TestCase
     }
     public function testIntMatrix()
     {
-        $type = Type::for('int[][]');
-        $altType = Type::for('int', 2);
+        $type = Type::forKey('int[][]');
+        $altType = Type::forKey('int', 2);
 
         $this->assertEquals($type, $altType);
 

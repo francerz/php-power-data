@@ -30,7 +30,15 @@ class Arrays
         });
     }
 
-    static public function filter($array, ?callable $callback = null, int $flag = 0)
+    /**
+     * Undocumented function
+     *
+     * @param array $array
+     * @param callable|null $callback
+     * @param integer $flag
+     * @return void
+     */
+    static public function filter($array, $callback = null, $flag = 0)
     {
         if (is_array($array)) {
             return array_filter($array, $callback, $flag);
@@ -162,7 +170,13 @@ class Arrays
         return $index;
     }
 
-    public static function replaceKeys(array $array, array $keys, ?array $newKeys = null)
+    /**
+     * @param array $array
+     * @param array $keys
+     * @param array|null $newKeys
+     * @return void
+     */
+    public static function replaceKeys(array $array, array $keys, $newKeys = null)
     {
         if (isset($newKeys) && count($keys) != count($newKeys)) {
             throw new LogicException('Params $keys and $newKeys must have same length.');
@@ -177,12 +191,12 @@ class Arrays
         return $new;
     }
 
-    public static function fromIterable(iterable $iterable, $keepKeys = true) : array
+    public static function fromIterable(iterable $iterable, $keepKeys = true)
     {
         if (is_array($iterable)) {
             return $iterable;
         }
-        
+
         $array = [];
         if ($keepKeys) {
             foreach ($iterable as $key => $value) {

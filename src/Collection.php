@@ -16,7 +16,7 @@ class Collection implements
         $this->data = $data;
     }
     #region \ArrayAccess implementation
-    public function offsetExists($offset) : bool
+    public function offsetExists($offset)
     {
         if (isset($this->data[$offset])) {
             return true;
@@ -61,7 +61,7 @@ class Collection implements
     #endregion
 
     #region \Countable implementation
-    public function count() : int
+    public function count()
     {
         return count($this->data);
     }

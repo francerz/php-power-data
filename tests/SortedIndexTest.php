@@ -7,7 +7,7 @@ class SortedIndexTest extends TestCase
 {
     public function testContains()
     {
-        $index = new SortedIndex([8,7,2,1,45,932,23,135,85,585,238,246,0,5,10,24,856]);
+        $index = new SortedIndex([8, 7, 2, 1, 45, 932, 23, 135, 85, 585, 238, 246, 0, 5, 10, 24, 856]);
 
         $this->assertTrue($index->contains(8, $j1));
         $this->assertTrue($index->contains(23, $j2));
@@ -22,9 +22,9 @@ class SortedIndexTest extends TestCase
         $array1 = range(1, 530);
         $array2 = range(-2800, 3);
 
-        $index0 = new SortedIndex(range(0,5));
-        $index1 = new SortedIndex(range(1,10));
-        $index2 = new SortedIndex(range(-10,3));
+        $index0 = new SortedIndex(range(0, 5));
+        $index1 = new SortedIndex(range(1, 10));
+        $index2 = new SortedIndex(range(-10, 3));
         $actual = SortedIndex::intersect([$index0, $index1, $index2]);
         $this->assertEquals([1,2,3], $actual);
     }
@@ -42,18 +42,18 @@ class SortedIndexTest extends TestCase
         for ($i = 0; $i < $iterations; $i++) {
             $resultSorted = SortedIndex::intersect($indexPeriodo, $indexMateria, $indexAlumno);
         }
-        $sortedEnd = microtime(true); 
+        $sortedEnd = microtime(true);
 
         $arrayStart = microtime(true);
         for ($i = 0; $i < $iterations; $i++) {
             $resultArray = array_intersect($periodo_id, $materia_id, $alumno_id);
         }
         $arrayEnd = microtime(true);
-        
+
         $resultArray = array_values($resultArray);
         $resultSorted = array_values($resultSorted);
         $this->assertEquals($resultArray, $resultSorted);
-        
+
         $arrayDiff = 0;
         $arrayDiff = $arrayEnd - $arrayStart;
         $sortedDiff = $sortedEnd - $sortedStart;
@@ -65,7 +65,7 @@ class SortedIndexTest extends TestCase
         ];
     }
 
-    public function _testIntersectPerformance()
+    public function atestIntersectPerformance()
     {
         $data[] = $this->intersectPerformane(1);
         $data[] = $this->intersectPerformane(10);
@@ -74,6 +74,6 @@ class SortedIndexTest extends TestCase
         // $data[] = $this->intersectPerformane(10000);
         // $data[] = $this->intersectPerformane(100000);
 
-        echo PHP_EOL.json_encode($data);
+        echo PHP_EOL . json_encode($data);
     }
 }

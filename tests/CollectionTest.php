@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class CollectionTest extends TestCase
 {
-    public function testConstructor_Empty()
+    public function testConstructorEmpty()
     {
         $collection = new Collection();
 
@@ -17,7 +17,7 @@ class CollectionTest extends TestCase
     /**
      * @depends testConstructor_Empty
      */
-    public function testOffsetSet_EmptyOffset(Collection $collection)
+    public function testOffsetSetEmptyOffset(Collection $collection)
     {
         $collection[] = 0;
 
@@ -30,7 +30,7 @@ class CollectionTest extends TestCase
     /**
      * @depends testOffsetSet_EmptyOffset
      */
-    public function testOffsetSet_NumericOffset(Collection $collection)
+    public function testOffsetSetNumericOffset(Collection $collection)
     {
         $collection[1] = 1;
         $this->assertEquals(2, $collection->count());
@@ -40,7 +40,7 @@ class CollectionTest extends TestCase
     /**
      * @depends testOffsetSet_NumericOffset
      */
-    public function testOffsetSet_StringOffset(Collection $collection)
+    public function testOffsetSetStringOffset(Collection $collection)
     {
         $this->expectException(InvalidOffsetException::class);
         $collection['a'] = 2;

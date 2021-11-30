@@ -8,22 +8,22 @@ class IterableTest extends TestCase
     public function testFilterColumns()
     {
         $a = json_decode(json_encode([
-            ['col1'=>1, 'col2'=>1],
-            ['col1'=>2, 'col2'=>1],
-            ['col1'=>3, 'col2'=>2]
+            ['col1' => 1, 'col2' => 1],
+            ['col1' => 2, 'col2' => 1],
+            ['col1' => 3, 'col2' => 2]
         ]));
 
         $this->assertEquals(
-            [['col1'=>1],['col1'=>2],['col1'=>3]],
+            [['col1' => 1],['col1' => 2],['col1' => 3]],
             Iterables::filterColumns($a, ['col1'])
         );
         $this->assertEquals(
-            [['a'=>1],['a'=>2],['a'=>3]],
-            Iterables::filterColumns($a, ['col1'],['a'])
+            [['a' => 1],['a' => 2],['a' => 3]],
+            Iterables::filterColumns($a, ['col1'], ['a'])
         );
         $this->assertEquals(
-            [['a'=>1],['a'=>1],['a'=>2]],
-            Iterables::filterColumns($a, ['col2'],['a'])
+            [['a' => 1],['a' => 1],['a' => 2]],
+            Iterables::filterColumns($a, ['col2'], ['a'])
         );
     }
 

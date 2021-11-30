@@ -8,7 +8,7 @@ abstract class Matrix
     {
         $out = [];
         foreach ($matrix as $name => $col) {
-            foreach ($col as $i =>$cell) {
+            foreach ($col as $i => $cell) {
                 $out[$i][$name] = $cell;
             }
         }

@@ -358,7 +358,7 @@ class Type
         if (!$this->isClass()) {
             return null;
         }
-        return substr($this->type, strrpos($this->type, '\\')+1);
+        return substr($this->type, strrpos($this->type, '\\') + 1);
     }
 
     public function getNamespace()

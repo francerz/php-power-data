@@ -13,9 +13,9 @@ class MatrixTest extends TestCase
         ]);
 
         $expected = [
-            ['qty'=>1, 'price'=>10],
-            ['qty'=>2, 'price'=>20],
-            ['qty'=>3, 'price'=>30]
+            ['qty' => 1, 'price' => 10],
+            ['qty' => 2, 'price' => 20],
+            ['qty' => 3, 'price' => 30]
         ];
 
         $this->assertEquals($expected, $matrix);
@@ -30,9 +30,9 @@ class MatrixTest extends TestCase
         ]);
 
         $expected = [
-            ['qty'=>1, 'price'=>10, 'sell_id'=> 1],
-            ['qty'=>2, 'price'=>20, 'sell_id'=> 1],
-            ['qty'=>3, 'price'=>30, 'sell_id'=> 1]
+            ['qty' => 1, 'price' => 10, 'sell_id' => 1],
+            ['qty' => 2, 'price' => 20, 'sell_id' => 1],
+            ['qty' => 3, 'price' => 30, 'sell_id' => 1]
         ];
 
         $this->assertEquals($expected, $matrix);

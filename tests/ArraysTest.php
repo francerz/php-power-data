@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class ArraysTest extends TestCase
 {
-    public function testHasNumericKeys_EmptyArray()
+    public function testHasNumericKeysEmptyArray()
     {
         $input = [];
         $actual = Arrays::hasNumericKeys($input);
@@ -15,7 +15,7 @@ class ArraysTest extends TestCase
     /**
      * @depends testHasNumericKeys_EmptyArray
      */
-    public function testHasNumericKeys_SimpleArray(array $input)
+    public function testHasNumericKeysSimpleArray(array $input)
     {
         $input[] = 'foo';
         $input[] = 'bar';
@@ -25,7 +25,7 @@ class ArraysTest extends TestCase
     /**
      * @depends testHasNumericKeys_EmptyArray
      */
-    public function testHasNumericKeys_ExplicitNumericKeys(array $input)
+    public function testHasNumericKeysExplicitNumericKeys(array $input)
     {
         $input[1] = 'foo';
         $input[2] = 'bar';
@@ -35,7 +35,7 @@ class ArraysTest extends TestCase
     /**
      * @depends testHasNumericKeys_EmptyArray
      */
-    public function testHasNumericKeys_ExplicitOnlyStringKeys(array $input)
+    public function testHasNumericKeysExplicitOnlyStringKeys(array $input)
     {
         $input['a'] = 'foo';
         $input['b'] = 'bar';
@@ -46,14 +46,14 @@ class ArraysTest extends TestCase
     /**
      * @depends testHasNumericKeys_ExplicitOnlyStringKeys
      */
-    public function testHasNumericKeys_ExplicitAnyNumericKey(array $input)
+    public function testHasNumericKeysExplicitAnyNumericKey(array $input)
     {
         $input[] = 'tic';
         $actual = Arrays::hasNumericKeys($input);
         $this->assertTrue($actual);
     }
 
-    public function testHasStringKeys_EmptyArray()
+    public function testHasStringKeysEmptyArray()
     {
         $input = [];
         $actual = Arrays::hasStringKeys($input);
@@ -63,7 +63,7 @@ class ArraysTest extends TestCase
     /**
      * @depends testHasStringKeys_EmptyArray
      */
-    public function testHasStringKeys_SimpleArray(array $input)
+    public function testHasStringKeysSimpleArray(array $input)
     {
         $input[] = 'foo';
         $input[] = 'bar';
@@ -73,7 +73,7 @@ class ArraysTest extends TestCase
     /**
      * @depends testHasStringKeys_EmptyArray
      */
-    public function testHasStringKeys_ExplicitNumericKeys(array $input)
+    public function testHasStringKeysExplicitNumericKeys(array $input)
     {
         $input[1] = 'foo';
         $input[2] = 'bar';
@@ -84,7 +84,7 @@ class ArraysTest extends TestCase
     /**
      * @depends testHasStringKeys_EmptyArray
      */
-    public function testHasStringKeys_ExplicitStringKeys(array $input)
+    public function testHasStringKeysExplicitStringKeys(array $input)
     {
         $input['a'] = 'foo';
         $input['b'] = 'bar';
@@ -94,7 +94,7 @@ class ArraysTest extends TestCase
     /**
      * @depends testHasStringKeys_ExplicitNumericKeys
      */
-    public function testHasStringKeys_ExplicitAnyStringKey(array $input)
+    public function testHasStringKeysExplicitAnyStringKey(array $input)
     {
         $input['foo'] = 'bar';
         $actual = Arrays::hasStringKeys($input);
@@ -102,28 +102,28 @@ class ArraysTest extends TestCase
     }
 
 
-    public function testIntersect_numeric()
+    public function testIntersectNumeric()
     {
         $input1 = [1, 2, 3, 4, 5, 6];
         $input2 = [2, 4, 6, 8];
-        $expected = [1=>2, 3=>4, 5=>6];
+        $expected = [1 => 2, 3 => 4, 5 => 6];
 
         $result = Arrays::intersect($input1, $input2);
 
         $this->assertEquals($expected, $result);
     }
 
-    public function testIntersect_empty()
+    public function testIntersectEmpty()
     {
         $result = Arrays::intersect([1], []);
         $this->assertEquals([], $result);
     }
 
-    public function testIntersect_string()
+    public function testIntersectString()
     {
-        $input1 = ['a','b','c'];
-        $input2 = ['b','d','f'];
-        $expected = [1=>'b'];
+        $input1 = ['a', 'b', 'c'];
+        $input2 = ['b', 'd', 'f'];
+        $expected = [1 => 'b'];
         $result = Arrays::intersect($input1, $input2);
 
         $this->assertEquals($expected, $result);
@@ -131,7 +131,7 @@ class ArraysTest extends TestCase
 
     public function testKeyInsensitive()
     {
-        $input = ['A'=>65, 'B'=> 66, 'C'=>67];
+        $input = ['A' => 65, 'B' => 66, 'C' => 67];
 
         $this->assertEquals('A', Arrays::keyInsensitive($input, 'A'));
         $this->assertEquals('A', Arrays::keyInsensitive($input, 'a'));
@@ -144,7 +144,7 @@ class ArraysTest extends TestCase
     }
 
     /**
-     * 
+     *
      * @depends testKeyInsensitive
      *
      * @param array $input
@@ -152,40 +152,40 @@ class ArraysTest extends TestCase
      */
     public function testValueKeyInsensitive(array $input)
     {
-        $this->assertEquals(65, Arrays::valueKeyInsensitive($input,'A'));
-        $this->assertEquals(65, Arrays::valueKeyInsensitive($input,'a'));
-        $this->assertEquals(66, Arrays::valueKeyInsensitive($input,'B'));
-        $this->assertEquals(66, Arrays::valueKeyInsensitive($input,'b'));
-        $this->assertEquals(67, Arrays::valueKeyInsensitive($input,'C'));
-        $this->assertEquals(67, Arrays::valueKeyInsensitive($input,'c'));
+        $this->assertEquals(65, Arrays::valueKeyInsensitive($input, 'A'));
+        $this->assertEquals(65, Arrays::valueKeyInsensitive($input, 'a'));
+        $this->assertEquals(66, Arrays::valueKeyInsensitive($input, 'B'));
+        $this->assertEquals(66, Arrays::valueKeyInsensitive($input, 'b'));
+        $this->assertEquals(67, Arrays::valueKeyInsensitive($input, 'C'));
+        $this->assertEquals(67, Arrays::valueKeyInsensitive($input, 'c'));
     }
 
 
     public function testNest()
     {
         $groups = array(
-            ['group_id'=>'1', 'signature'=>'Programming basics'],
-            ['group_id'=>'2', 'signature'=>'Computing maths']
+            ['group_id' => '1', 'signature' => 'Programming basics'],
+            ['group_id' => '2', 'signature' => 'Computing maths']
         );
         $students = array(
-            ['student_id'=>'1', 'name'=>'John Doe', 'group_id'=>'1'],
-            ['student_id'=>'2', 'name'=>'Jane Doe', 'group_id'=>'2'],
-            ['student_id'=>'3', 'name'=>'James Doe', 'group_id'=>'2'],
-                ['student_id'=>'4', 'name'=>'Judy Doe', 'group_id'=>'1']
+            ['student_id' => '1', 'name' => 'John Doe', 'group_id' => '1'],
+            ['student_id' => '2', 'name' => 'Jane Doe', 'group_id' => '2'],
+            ['student_id' => '3', 'name' => 'James Doe', 'group_id' => '2'],
+            ['student_id' => '4', 'name' => 'Judy Doe', 'group_id' => '1']
         );
 
         $expected = array(
-            ['group_id'=>'1', 'signature'=>'Programming basics', 'Students'=>array(
-                ['student_id'=>'1', 'name'=>'John Doe', 'group_id'=>'1'],
-                ['student_id'=>'4', 'name'=>'Judy Doe', 'group_id'=>'1']
+            ['group_id' => '1', 'signature' => 'Programming basics', 'Students' => array(
+                ['student_id' => '1', 'name' => 'John Doe', 'group_id' => '1'],
+                ['student_id' => '4', 'name' => 'Judy Doe', 'group_id' => '1']
             )],
-            ['group_id'=>'2', 'signature'=>'Computing maths', 'Students'=>array(
-                ['student_id'=>'2', 'name'=>'Jane Doe', 'group_id'=>'2'],
-                ['student_id'=>'3', 'name'=>'James Doe', 'group_id'=>'2']
+            ['group_id' => '2', 'signature' => 'Computing maths', 'Students' => array(
+                ['student_id' => '2', 'name' => 'Jane Doe', 'group_id' => '2'],
+                ['student_id' => '3', 'name' => 'James Doe', 'group_id' => '2']
             )]
         );
 
-        $groups_students = Arrays::nest($groups, $students, 'Students', function($group, $student) {
+        $groups_students = Arrays::nest($groups, $students, 'Students', function ($group, $student) {
             return $group['group_id'] == $student['group_id'];
         });
 
@@ -195,7 +195,7 @@ class ArraysTest extends TestCase
         $students_obj = json_decode(json_encode($students));
         $expected_obj = json_decode(json_encode($expected));
 
-        $groups_students_obj = Arrays::nest($groups_obj, $students_obj, 'Students', function($group, $student) {
+        $groups_students_obj = Arrays::nest($groups_obj, $students_obj, 'Students', function ($group, $student) {
             return $group->group_id == $student->group_id;
         });
 
@@ -250,7 +250,7 @@ class ArraysTest extends TestCase
 
         $actual = Arrays::replaceKeys($array, array_keys($replaces), array_values($replaces));
         $this->assertEquals($expected, $actual);
-        
+
         $actual = Arrays::replaceKeys($array, $replaces);
         $this->assertEquals($expected, $actual);
     }

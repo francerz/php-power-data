@@ -2,6 +2,9 @@
 
 namespace Francerz\PowerData;
 
+/**
+ * @deprecated v0.1.26
+ */
 class Multimap
 {
     private $map;

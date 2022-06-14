@@ -5,6 +5,9 @@ namespace Francerz\PowerData;
 use Exception;
 use Francerz\PowerData\Exceptions\InvalidOffsetException;
 
+/**
+ * @deprecated v0.1.26
+ */
 class Collection implements
     \ArrayAccess,
     \Countable,

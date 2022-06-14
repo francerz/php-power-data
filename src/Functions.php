@@ -4,11 +4,12 @@ namespace Francerz\PowerData;
 
 use ReflectionFunction;
 
+/**
+ * @deprecated v0.1.26
+ */
 class Functions
 {
     /**
-     * Undocumented function
-     *
      * @param callable $function
      * @param array $args
      * @param string|null $retType

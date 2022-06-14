@@ -2,8 +2,10 @@
 
 namespace Francerz\PowerData;
 
-use Exception;
 
+/**
+ * @deprecated v0.1.26
+ */
 class Tree
 {
     /** @var TreeNode|null */

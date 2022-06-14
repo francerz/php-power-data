@@ -4,6 +4,9 @@ namespace Francerz\PowerData;
 
 use Iterator;
 
+/**
+ * @deprecated v0.1.26
+ */
 class Map implements Iterator
 {
     private $map;

@@ -53,6 +53,7 @@ abstract class Iterables
     }
 
     /**
+     * @deprecated v0.1.26
      * @param iterable $a
      * @param iterable $b
      * @param callable|null $comparer

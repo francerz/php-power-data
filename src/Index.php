@@ -121,7 +121,8 @@ class Index implements ArrayAccess, Countable, Iterator
             }
             $idx = [];
             foreach ($v as $val) {
-                $idx = array_merge($idx, $index[$val]->toArray() ?? []);
+                $data = isset($index[$val]) ? $index[$val]->toArray() : [];
+                $idx = array_merge($idx, $data);
             }
             sort($idx);
             $ks[] = new SortedIndex($idx);

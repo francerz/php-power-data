@@ -1,5 +1,7 @@
 <?php
 
+namespace Francerz\PowerData\Tests;
+
 use Francerz\PowerData\SortedIndex;
 use PHPUnit\Framework\TestCase;
 
@@ -18,10 +20,6 @@ class SortedIndexTest extends TestCase
 
     public function testIntersect()
     {
-        $array0 = range(0, 15000);
-        $array1 = range(1, 530);
-        $array2 = range(-2800, 3);
-
         $index0 = new SortedIndex(range(0, 5));
         $index1 = new SortedIndex(range(1, 10));
         $index2 = new SortedIndex(range(-10, 3));
@@ -29,7 +27,7 @@ class SortedIndexTest extends TestCase
         $this->assertEquals([1,2,3], $actual);
     }
 
-    private function intersectPerformane($iterations)
+    private function intersectPerformance($iterations)
     {
         $periodo_id = range(0, 15000);
         $materia_id = range(1, 50);
@@ -40,7 +38,7 @@ class SortedIndexTest extends TestCase
         $indexMateria = new SortedIndex($materia_id);
         $indexAlumno = new SortedIndex($alumno_id);
         for ($i = 0; $i < $iterations; $i++) {
-            $resultSorted = SortedIndex::intersect($indexPeriodo, $indexMateria, $indexAlumno);
+            $resultSorted = SortedIndex::intersect([$indexPeriodo, $indexMateria, $indexAlumno]);
         }
         $sortedEnd = microtime(true);
 
@@ -65,15 +63,16 @@ class SortedIndexTest extends TestCase
         ];
     }
 
-    public function atestIntersectPerformance()
+    public function testIntersectPerformance()
     {
-        $data[] = $this->intersectPerformane(1);
-        $data[] = $this->intersectPerformane(10);
-        $data[] = $this->intersectPerformane(100);
-        // $data[] = $this->intersectPerformane(1000);
-        // $data[] = $this->intersectPerformane(10000);
-        // $data[] = $this->intersectPerformane(100000);
+        $data[] = $this->intersectPerformance(1);
+        $data[] = $this->intersectPerformance(10);
+        $data[] = $this->intersectPerformance(100);
+        // $data[] = $this->intersectPerformance(1000);
+        // $data[] = $this->intersectPerformance(10000);
+        // $data[] = $this->intersectPerformance(100000);
+        // $data[] = $this->intersectPerformance(1000000);
 
-        echo PHP_EOL . json_encode($data);
+        // echo PHP_EOL . json_encode($data);
     }
 }

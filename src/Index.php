@@ -22,7 +22,6 @@ class Index implements ArrayAccess, Countable, Iterator
      */
     public function __construct($iterable, array $columns)
     {
-        $this->iterable = $iterable;
         $this->rows = Arrays::fromIterable($iterable);
         $this->columns = $columns;
         $this->reindex();
@@ -33,24 +32,28 @@ class Index implements ArrayAccess, Countable, Iterator
         if (array_key_exists($col, $this->columns)) {
             throw new Exception(sprintf('Column %s already exists.', $col));
         }
+        $idxCol = [];
         foreach ($this->rows as $k => $row) {
             $row = (array)$row;
             $v = array_key_exists($col, $row) ? $row[$col] : null;
-            $this->indexes[$col][$v][] = $k;
+            $idxCol[$v] = $idxCol[$v] ?? new SortedIndex([]);
+            $idxCol[$v][$k] = $k;
         }
-        $this->columns[] = $col;
+        $this->indexes[$col] = $idxCol;
     }
 
     /**
      * @param array $row
      * @param int $k
+     * @param array &$indexes
      * @return void
      */
-    private function indexRow(array $row, $k)
+    private function indexRow(array $row, $k, ?array &$indexes = null)
     {
         foreach ($this->columns as $col) {
             $v = array_key_exists($col, $row) ? $row[$col] : null;
-            $this->indexes[$col][$v][$k] = $k;
+            $indexes[$col][$v] = $indexes[$col][$v] ?? new SortedIndex([]);
+            $indexes[$col][$v][$k] = $k;
         }
     }
 
@@ -63,15 +66,16 @@ class Index implements ArrayAccess, Countable, Iterator
      */
     public function reindex()
     {
-        $this->indexes = array_fill_keys($this->columns, []);
+        $indexes = array_fill_keys($this->columns, []);
         foreach ($this->rows as $k => $row) {
-            $this->indexRow((array)$row, $k);
+            $this->indexRow((array)$row, $k, $indexes);
         }
-        foreach ($this->indexes as &$index) {
-            foreach ($index as $k => &$v) {
+        foreach ($indexes as &$col) {
+            foreach ($col as &$v) {
                 $v = new SortedIndex($v);
             }
         }
+        $this->indexes = $indexes;
     }
 
     /**
@@ -86,14 +90,16 @@ class Index implements ArrayAccess, Countable, Iterator
             throw new Exception(sprintf('Invalid $item type %s, only object or array accepted.', gettype($item)));
         }
         $this->rows[] = $item;
-        $k = array_key_last($this->rows);
+        $keys = array_keys($this->rows);
+        $k = end($keys);
         $row = (array)$item;
-        $this->indexRow($row, $k);
+        $this->indexRow($row, $k, $this->indexes);
     }
 
     public function addColumn(string $column)
     {
         $this->indexColumn($column);
+        $this->columns[] = $column;
     }
 
     /**
@@ -102,16 +108,23 @@ class Index implements ArrayAccess, Countable, Iterator
      */
     public function findAllKeys(array $filter)
     {
-        $keys = array_keys($this->rows);
-
         if (empty($filter)) {
-            return $keys;
+            return array_keys($this->rows);
         }
 
         $ks = [];
         foreach ($filter as $k => $v) {
             $index = isset($this->indexes[$k]) ? $this->indexes[$k] : [];
-            $ks[] = isset($index[$v]) ? $index[$v] : SortedIndex::newEmpty();
+            if (is_scalar($v)) {
+                $ks[] = isset($index[$v]) ? $index[$v] : SortedIndex::newEmpty();
+                continue;
+            }
+            $idx = [];
+            foreach ($v as $val) {
+                $idx = array_merge($idx, $index[$val]->toArray() ?? []);
+            }
+            sort($idx);
+            $ks[] = new SortedIndex($idx);
         }
 
         if (count($ks) < 2) {
@@ -119,9 +132,7 @@ class Index implements ArrayAccess, Countable, Iterator
             return Arrays::fromIterable($ret);
         }
 
-        return call_user_func([SortedIndex::class,'intersect'], $ks);
-
-        return call_user_func('array_intersect_key', $ks);
+        return call_user_func([SortedIndex::class, 'intersect'], $ks);
     }
 
     public function findAll(array $filter)

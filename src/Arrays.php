@@ -10,6 +10,7 @@ class Arrays
     public const NEST_COLLECTION = 0;
     public const NEST_SINGLE_FIRST = 1;
     public const NEST_SINGLE_LAST = 2;
+
     public static function hasNumericKeys(array $array)
     {
         return count(array_filter($array, 'is_numeric', ARRAY_FILTER_USE_KEY)) > 0;

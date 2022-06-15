@@ -1,5 +1,7 @@
 <?php
 
+namespace Francerz\PowerData\Tests;
+
 use Francerz\PowerData\Index;
 use PHPUnit\Framework\TestCase;
 
@@ -46,6 +48,9 @@ class IndexTest extends TestCase
         $this->assertEquals([1], array_values($index->findAllKeys(['col1' => 2, 'col2' => 2])));
         $this->assertEquals([2], array_values($index->findAllKeys(['col1' => 3, 'col2' => 2])));
         $this->assertEquals([], array_values($index->findAllKeys(['col1' => 4,'col2' => 2])));
+
+        // ADD multiple values column values
+        $this->assertEquals([0, 3, 4, 7], array_values($index->findAllKeys(['col2' => [1, 4]])));
     }
 
     public function testMutableIndex()

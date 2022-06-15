@@ -2,10 +2,11 @@
 
 namespace Francerz\PowerData;
 
+use ArrayAccess;
 use Countable;
 use Iterator;
 
-class SortedIndex implements Countable, Iterator
+class SortedIndex implements Countable, Iterator, ArrayAccess
 {
     private $list;
     private $sorted = false;
@@ -22,6 +23,15 @@ class SortedIndex implements Countable, Iterator
         sort($this->list);
         $this->sorted = true;
     }
+
+    public function toArray()
+    {
+        if (!$this->sorted) {
+            $this->sort();
+        }
+        return $this->list;
+    }
+
     /**
      * @param mixed $value
      * @param integer|null $jumps
@@ -29,11 +39,8 @@ class SortedIndex implements Countable, Iterator
      */
     public function contains($value, &$jumps = null)
     {
-        if (!$this->sorted) {
-            $this->sort();
-        }
         $jumps = 0;
-        return static::binarySearch($this->list, $value, $jumps) !== null;
+        return $this->binarySearch($value, $jumps) !== null;
     }
     public function count()
     {
@@ -65,24 +72,48 @@ class SortedIndex implements Countable, Iterator
         return reset($this->list);
     }
 
+    public function offsetExists($offset)
+    {
+        return $this->contains($offset);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->binarySearch($offset);
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->list[$offset] = $value;
+        $this->sorted = false;
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->list[$offset]);
+        $this->sorted = false;
+    }
+
     /**
-     * @param array $array
      * @param mixed $value
      * @param integer $jumps
      * @return void
      */
-    private static function binarySearch(array $array, $value, &$jumps = 0)
+    private function binarySearch($value, &$jumps = 0)
     {
-        if (count($array) === 0) {
+        if (count($this->list) === 0) {
             return null;
         }
+        if (!$this->sorted) {
+            $this->sort();
+        }
         $start = 0;
-        $end = count($array) - 1;
+        $end = count($this->list) - 1;
 
         while ($start <= $end) {
             $jumps++;
             $mid = intval(($start + $end) / 2);
-            $chk = $array[$mid];
+            $chk = $this->list[$mid];
             if ($chk < $value) {
                 $start = $mid + 1;
             } elseif ($chk > $value) {
@@ -115,15 +146,15 @@ class SortedIndex implements Countable, Iterator
         return array_values($base);
     }
 
-    private static $_empty;
     /**
      * @return static
      */
     public static function newEmpty()
     {
-        if (!isset(static::$_empty)) {
-            static::$_empty = new static([]);
+        static $empty;
+        if (!isset($empty)) {
+            $empty = new static([]);
         }
-        return static::$_empty;
+        return clone $empty;
     }
 }

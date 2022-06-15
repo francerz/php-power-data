@@ -1,5 +1,7 @@
 <?php
 
+namespace Francerz\PowerData\Tests;
+
 use Francerz\PowerData\Iterables;
 use PHPUnit\Framework\TestCase;
 
@@ -30,15 +32,15 @@ class IterableTest extends TestCase
     // public function testCompare()
     // {
     //     $a = json_decode(json_encode([
-    //         ['a'=>1],
-    //         ['a'=>2],
-    //         ['a'=>3]
+    //         ['a' => 1],
+    //         ['a' => 2],
+    //         ['a' => 3]
     //     ]));
     //     $b = json_decode(json_encode([
-    //         ['b'=>2]
+    //         ['b' => 2]
     //     ]));
 
-    //     $this->assertEquals([], Iterables::diff($a, $b, function($a, $b) {
+    //     $this->assertEquals([], Iterables::diff($a, $b, function ($a, $b) {
     //         return $a->a == $b->b ? 0 : ($a->a > $b->b ? 1 : -1);
     //     }));
     // }

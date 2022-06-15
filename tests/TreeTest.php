@@ -1,5 +1,7 @@
 <?php
 
+namespace Francerz\PowerData\Tests;
+
 use Francerz\PowerData\Tree;
 use PHPUnit\Framework\TestCase;
 

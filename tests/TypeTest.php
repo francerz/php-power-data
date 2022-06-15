@@ -1,5 +1,7 @@
 <?php
 
+namespace Francerz\PowerData\Tests;
+
 use Francerz\PowerData\Type;
 use PHPUnit\Framework\TestCase;
 
@@ -7,7 +9,7 @@ class TypeTest extends TestCase
 {
     public function testInvalidType()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         Type::forKey("Dos_Uno@_");
     }
     public function testInt()

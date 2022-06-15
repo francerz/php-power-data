@@ -1,5 +1,7 @@
 <?php
 
+namespace Francerz\PowerData\Tests;
+
 use Francerz\PowerData\Multimap;
 use PHPUnit\Framework\TestCase;
 

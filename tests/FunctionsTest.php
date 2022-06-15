@@ -1,7 +1,10 @@
 <?php
 
+namespace Francerz\PowerData\Tests;
+
 use Francerz\PowerData\Functions;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class FunctionsTest extends TestCase
 {

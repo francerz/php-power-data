@@ -1,5 +1,7 @@
 <?php
 
+namespace Francerz\PowerData\Tests;
+
 use Francerz\PowerData\Collection;
 use Francerz\PowerData\Exceptions\InvalidOffsetException;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +17,7 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @depends testConstructor_Empty
+     * @depends testConstructorEmpty
      */
     public function testOffsetSetEmptyOffset(Collection $collection)
     {
@@ -28,7 +30,7 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @depends testOffsetSet_EmptyOffset
+     * @depends testOffsetSetEmptyOffset
      */
     public function testOffsetSetNumericOffset(Collection $collection)
     {
@@ -38,7 +40,7 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @depends testOffsetSet_NumericOffset
+     * @depends testOffsetSetNumericOffset
      */
     public function testOffsetSetStringOffset(Collection $collection)
     {
@@ -47,7 +49,7 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @depends testOffsetSet_NumericOffset
+     * @depends testOffsetSetNumericOffset
      */
     public function testOffsetExists(Collection $collection)
     {
@@ -57,7 +59,7 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @depends testOffsetSet_NumericOffset
+     * @depends testOffsetSetNumericOffset
      */
     public function testOffsetGet(Collection $collection)
     {

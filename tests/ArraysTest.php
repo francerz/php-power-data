@@ -1,5 +1,7 @@
 <?php
 
+namespace Francerz\PowerData\Tests;
+
 use Francerz\PowerData\Arrays;
 use PHPUnit\Framework\TestCase;
 
@@ -13,7 +15,7 @@ class ArraysTest extends TestCase
         return $input;
     }
     /**
-     * @depends testHasNumericKeys_EmptyArray
+     * @depends testHasNumericKeysEmptyArray
      */
     public function testHasNumericKeysSimpleArray(array $input)
     {
@@ -23,7 +25,7 @@ class ArraysTest extends TestCase
         $this->assertTrue($actual);
     }
     /**
-     * @depends testHasNumericKeys_EmptyArray
+     * @depends testHasNumericKeysEmptyArray
      */
     public function testHasNumericKeysExplicitNumericKeys(array $input)
     {
@@ -33,7 +35,7 @@ class ArraysTest extends TestCase
         $this->assertTrue($actual);
     }
     /**
-     * @depends testHasNumericKeys_EmptyArray
+     * @depends testHasNumericKeysEmptyArray
      */
     public function testHasNumericKeysExplicitOnlyStringKeys(array $input)
     {
@@ -44,7 +46,7 @@ class ArraysTest extends TestCase
         return $input;
     }
     /**
-     * @depends testHasNumericKeys_ExplicitOnlyStringKeys
+     * @depends testHasNumericKeysExplicitOnlyStringKeys
      */
     public function testHasNumericKeysExplicitAnyNumericKey(array $input)
     {
@@ -61,7 +63,7 @@ class ArraysTest extends TestCase
         return $input;
     }
     /**
-     * @depends testHasStringKeys_EmptyArray
+     * @depends testHasStringKeysEmptyArray
      */
     public function testHasStringKeysSimpleArray(array $input)
     {
@@ -71,7 +73,7 @@ class ArraysTest extends TestCase
         $this->assertFalse($actual);
     }
     /**
-     * @depends testHasStringKeys_EmptyArray
+     * @depends testHasStringKeysEmptyArray
      */
     public function testHasStringKeysExplicitNumericKeys(array $input)
     {
@@ -82,7 +84,7 @@ class ArraysTest extends TestCase
         return $input;
     }
     /**
-     * @depends testHasStringKeys_EmptyArray
+     * @depends testHasStringKeysEmptyArray
      */
     public function testHasStringKeysExplicitStringKeys(array $input)
     {
@@ -92,7 +94,7 @@ class ArraysTest extends TestCase
         $this->assertTrue($actual);
     }
     /**
-     * @depends testHasStringKeys_ExplicitNumericKeys
+     * @depends testHasStringKeysExplicitNumericKeys
      */
     public function testHasStringKeysExplicitAnyStringKey(array $input)
     {

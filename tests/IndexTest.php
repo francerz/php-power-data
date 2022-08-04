@@ -21,6 +21,7 @@ class IndexTest extends TestCase
             ['col1' => 6, 'col2' => 3], # 5
             ['col1' => 7, 'col2' => 2], # 6
             ['col1' => 8, 'col2' => 1], # 7
+            ['col1' => 9, 'col2' => null] # 8
         ), ['col1','col2']);
     }
     public function testFindAllKeys()
@@ -36,7 +37,8 @@ class IndexTest extends TestCase
         $this->assertEquals([5], array_values($index->findAllKeys(['col1' => 6])));
         $this->assertEquals([6], array_values($index->findAllKeys(['col1' => 7])));
         $this->assertEquals([7], array_values($index->findAllKeys(['col1' => 8])));
-        $this->assertEquals([], array_values($index->findAllKeys(['col1' => 9])));
+        $this->assertEquals([8], array_values($index->findAllKeys(['col1' => 9])));
+        $this->assertEquals([], array_values($index->findAllKeys(['col1' => 10])));
 
         $this->assertEquals([], array_values($index->findAllKeys(['col2' => 0])));
         $this->assertEquals([0,3,7], array_values($index->findAllKeys(['col2' => 1])));
@@ -51,6 +53,8 @@ class IndexTest extends TestCase
 
         // ADD multiple values column values
         $this->assertEquals([0, 3, 4, 7], array_values($index->findAllKeys(['col2' => [1, 4]])));
+
+        $this->assertEquals([8], array_values($index->findAllKeys(['col2' => null])));
     }
 
     public function testMutableIndex()
@@ -86,7 +90,7 @@ class IndexTest extends TestCase
     {
         $groups = $this->index->groupBy('col2');
 
-        $this->assertEquals(4, count($groups));
+        $this->assertEquals(5, count($groups));
         $this->assertEquals(8, max(array_column($groups[1], 'col1')));
         $this->assertEquals(7, max(array_column($groups[2], 'col1')));
         $this->assertEquals(6, max(array_column($groups[3], 'col1')));

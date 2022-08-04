@@ -115,7 +115,7 @@ class Index implements ArrayAccess, Countable, Iterator
         $ks = [];
         foreach ($filter as $k => $v) {
             $index = isset($this->indexes[$k]) ? $this->indexes[$k] : [];
-            if (is_scalar($v)) {
+            if (is_scalar($v) || is_null($v)) {
                 $ks[] = isset($index[$v]) ? $index[$v] : SortedIndex::newEmpty();
                 continue;
             }

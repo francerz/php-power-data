@@ -1,8 +1,10 @@
 <?php
 
-namespace Francerz\PowerData;
+namespace Francerz\PowerData\Typed;
 
 use Exception;
+use Francerz\PowerData\Collection;
+use Francerz\PowerData\Type;
 
 /**
  * @deprecated v0.1.26
@@ -11,7 +13,7 @@ class TypedCollection extends Collection
 {
     private $type;
     private $itemType;
-    public function __construct($data = array(), Type $itemType)
+    public function __construct(Type $itemType, $data = array())
     {
         $this->type = Type::def(
             $itemType->getType(),

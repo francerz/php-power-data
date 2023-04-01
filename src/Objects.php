@@ -3,6 +3,7 @@
 namespace Francerz\PowerData;
 
 use InvalidArgumentException;
+use ReflectionClass;
 
 class Objects
 {
@@ -11,6 +12,11 @@ class Objects
         return spl_object_hash($obj);
     }
 
+    /**
+     * @param object $obj
+     * @param string $className
+     * @return object
+     */
     public static function cast(object $obj, string $className)
     {
         if (!class_exists($className)) {

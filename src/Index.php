@@ -230,4 +230,24 @@ class Index implements ArrayAccess, Countable, Iterator
         }
         return $groups;
     }
+
+    /**
+     * Performs aggregation to indexed elements by a given callback function.
+     *
+     * If $column is set, then aggregation will be performed by specified column.
+     * When $column is null, then aggregation will consider full indexed items.
+     *
+     * if $filter is set, collection will be filtered by given restrictions.
+     *
+     * @param callable $method Callback function to aggregate.
+     * @param string|null $column Column to aggregate, if null items will be passed.
+     * @param array|null $filter Filters indexed items.
+     * @return mixed
+     */
+    public function aggregate(callable $callback, ?string $column = null, ?array $filter = null, array $moreArgs = [])
+    {
+        $items = isset($filter) ? $this[$filter] : $this->rows;
+        $items = isset($column) ? array_column($items, $column) : $items;
+        return empty($items) ? null : call_user_func($callback, $items, ...$moreArgs);
+    }
 }

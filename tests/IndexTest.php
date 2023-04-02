@@ -2,6 +2,7 @@
 
 namespace Francerz\PowerData\Tests;
 
+use Francerz\PowerData\Aggregations;
 use Francerz\PowerData\Index;
 use PHPUnit\Framework\TestCase;
 
@@ -94,5 +95,55 @@ class IndexTest extends TestCase
         $this->assertEquals(8, max(array_column($groups[1], 'col1')));
         $this->assertEquals(7, max(array_column($groups[2], 'col1')));
         $this->assertEquals(6, max(array_column($groups[3], 'col1')));
+    }
+
+    public function testAggregate()
+    {
+        $data = [
+            ['pk' => 1, 'fk' => 1, 'amount' => 5, 'seconds' => 10],
+            ['pk' => 2, 'fk' => 2, 'amount' => 12, 'seconds' => 21],
+            ['pk' => 3, 'fk' => 1, 'amount' => 8, 'seconds' => 12],
+            ['pk' => 4, 'fk' => 1, 'amount' => 10, 'seconds' => 15],
+            ['pk' => 5, 'fk' => 2, 'amount' => 3, 'seconds' => 8],
+            ['pk' => 6, 'fk' => 3, 'amount' => 10, 'seconds' => 11],
+            ['pk' => 7, 'fk' => 5, 'amount' => 9, 'seconds' => 18]
+        ];
+        $index = new Index($data, ['pk', 'fk']);
+
+        $this->assertEquals(7, $index->aggregate('count'));
+
+        $this->assertEquals(3, $index->aggregate('min', 'amount'));
+        $this->assertEquals(12, $index->aggregate('max', 'amount'));
+        $this->assertEquals(57, $index->aggregate('array_sum', 'amount'));
+
+        $this->assertEquals(8, $index->aggregate('min', 'seconds'));
+        $this->assertEquals(21, $index->aggregate('max', 'seconds'));
+        $this->assertEquals(95, $index->aggregate('array_sum', 'seconds'));
+
+        $this->assertEquals(5, $index->aggregate('min', 'amount', ['fk' => 1]));
+        $this->assertEquals(10, $index->aggregate('max', 'amount', ['fk' => 1]));
+        $this->assertEquals(3, $index->aggregate('count', 'amount', ['fk' => 1]));
+        $this->assertEquals(23, $index->aggregate('array_sum', 'amount', ['fk' => 1]));
+
+        $this->assertEquals(3, $index->aggregate('min', 'amount', ['fk' => [1, 2]]));
+        $this->assertEquals(12, $index->aggregate('max', 'amount', ['fk' => [1, 2]]));
+        $this->assertEquals(5, $index->aggregate('count', 'amount', ['fk' => [1, 2]]));
+        $this->assertEquals(38, $index->aggregate('array_sum', 'amount', ['fk' => [1, 2]]));
+
+        // Filter that returns 0 items causes null. (Coalesce operator ?? handle this).
+        $this->assertSame(null, $index->aggregate('min', 'amount', ['fk' => 4]));
+        $this->assertSame(null, $index->aggregate('max', 'amount', ['fk' => 4]));
+        $this->assertSame(null, $index->aggregate('array_sum', 'amount', ['fk' => 4]));
+
+        // Accessing unknown column causes null.
+        $this->assertSame(null, $index->aggregate('min', 'quantity'));
+
+        $this->assertEquals(3, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [0]));
+        $this->assertEquals(4.8, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [15]));
+        $this->assertEquals(6.5, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [25]));
+        $this->assertEquals(9, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [50]));
+        $this->assertEquals(10, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [75]));
+        $this->assertEquals(10.2, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [85]));
+        $this->assertEquals(12, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [100]));
     }
 }

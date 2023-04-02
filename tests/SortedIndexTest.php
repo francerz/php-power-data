@@ -15,7 +15,7 @@ class SortedIndexTest extends TestCase
         $this->assertTrue($index->contains(23, $j2));
         $this->assertFalse($index->contains(3, $j3));
 
-        echo json_encode([$j1, $j2, $j3]);
+        // print json_encode([$j1, $j2, $j3]);
     }
 
     public function testIntersect()
@@ -56,14 +56,14 @@ class SortedIndexTest extends TestCase
         $arrayDiff = $arrayEnd - $arrayStart;
         $sortedDiff = $sortedEnd - $sortedStart;
         return [
-            'iterations' => $iterations,
-            'ratio_difference' => $arrayDiff / $sortedDiff,
-            'array_intersect' => $arrayDiff,
-            'SortedIndex::intersect' => $sortedDiff,
+            'Total iterations' => $iterations,
+            'Time array_intersect' => $arrayDiff,
+            'Time SortedIndex::intersect' => $sortedDiff,
+            'Times ratio_difference' => $arrayDiff / $sortedDiff,
         ];
     }
 
-    public function testIntersectPerformance()
+    public function atestIntersectPerformance()
     {
         $data[] = $this->intersectPerformance(1);
         $data[] = $this->intersectPerformance(10);
@@ -73,6 +73,6 @@ class SortedIndexTest extends TestCase
         // $data[] = $this->intersectPerformance(100000);
         // $data[] = $this->intersectPerformance(1000000);
 
-        // echo PHP_EOL . json_encode($data);
+        print_r($data);
     }
 }

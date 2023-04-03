@@ -74,6 +74,18 @@ class AggregationsTest extends TestCase
         $this->assertEquals(100.000000000, Aggregations::findPercentile($data, 9, Aggregations::PERCENTILE_FLAGS_FIRST));
         $this->assertEquals(100.000000000, Aggregations::findPercentile($data, 10, Aggregations::PERCENTILE_FLAGS_FIRST));
 
+        $this->assertEquals(00.0000000000, Aggregations::findPercentile($data, 0, Aggregations::PERCENTILE_FLAGS_MIDDLE));
+        $this->assertEquals(8.33333333333, Aggregations::findPercentile($data, 1, Aggregations::PERCENTILE_FLAGS_MIDDLE));
+        $this->assertEquals(37.5000000000, Aggregations::findPercentile($data, 2, Aggregations::PERCENTILE_FLAGS_MIDDLE));
+        $this->assertEquals(54.1666666666, Aggregations::findPercentile($data, 3, Aggregations::PERCENTILE_FLAGS_MIDDLE));
+        $this->assertEquals(58.3333333333, Aggregations::findPercentile($data, 4, Aggregations::PERCENTILE_FLAGS_MIDDLE));
+        $this->assertEquals(75.0000000000, Aggregations::findPercentile($data, 5, Aggregations::PERCENTILE_FLAGS_MIDDLE));
+        $this->assertEquals(86.1111111111, Aggregations::findPercentile($data, 6, Aggregations::PERCENTILE_FLAGS_MIDDLE));
+        $this->assertEquals(88.8888888888, Aggregations::findPercentile($data, 7, Aggregations::PERCENTILE_FLAGS_MIDDLE));
+        $this->assertEquals(95.8333333334, Aggregations::findPercentile($data, 8, Aggregations::PERCENTILE_FLAGS_MIDDLE));
+        $this->assertEquals(100.000000000, Aggregations::findPercentile($data, 9, Aggregations::PERCENTILE_FLAGS_MIDDLE));
+        $this->assertEquals(100.000000000, Aggregations::findPercentile($data, 10, Aggregations::PERCENTILE_FLAGS_MIDDLE));
+
         $this->assertEquals(00.0000000000, Aggregations::findPercentile($data, 0, Aggregations::PERCENTILE_FLAGS_LAST));
         $this->assertEquals(16.6666666667, Aggregations::findPercentile($data, 1, Aggregations::PERCENTILE_FLAGS_LAST));
         $this->assertEquals(50.0000000000, Aggregations::findPercentile($data, 2, Aggregations::PERCENTILE_FLAGS_LAST));

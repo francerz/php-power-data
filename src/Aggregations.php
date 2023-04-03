@@ -49,7 +49,7 @@ class Aggregations
             return null;
         }
         if ($ignoreEmpty) {
-            return array_reduce($values, function($c, $v) {
+            return array_reduce($values, function ($c, $v) {
                 if (empty($v)) {
                     return $c;
                 }
@@ -189,15 +189,19 @@ class Aggregations
     /**
      * Calculates percentile from first value appearance.
      */
-    public const PERCENTILE_FLAGS_FIRST  = 0b00;
+    public const PERCENTILE_FLAGS_FIRST  = 0b0001;
+    /**
+     * Calculates percentile from the middle appearance.
+     */
+    public const PERCENTILE_FLAGS_MIDDLE   = 0b0010;
     /**
      * Calculates percentile from last value appearance.
      */
-    public const PERCENTILE_FLAGS_LAST   = 0b01;
+    public const PERCENTILE_FLAGS_LAST   = 0b0100;
     /**
      * Remove duplicated values.
      */
-    public const PERCENTILE_FLAGS_UNIQUE = 0b10;
+    public const PERCENTILE_FLAGS_UNIQUE = 0b1000;
 
     /**
      * Retrieves value at given percentile from a values collection.
@@ -215,10 +219,10 @@ class Aggregations
      *
      * @return float
      */
-    public static function percentile(array $values, float $percentile, int $flags = self::PERCENTILE_FLAGS_FIRST)
+    public static function percentile(array $values, float $percentile, int $flags = self::PERCENTILE_FLAGS_MIDDLE)
     {
         $percentile = min(max(0, $percentile), 100);
-        if (($flags & self::PERCENTILE_FLAGS_UNIQUE)) {
+        if (Flags::match($flags, self::PERCENTILE_FLAGS_UNIQUE)) {
             $values = array_unique($values, SORT_ASC);
         }
         sort($values);
@@ -236,13 +240,13 @@ class Aggregations
 
     /**
      * Calculates percentile position for given value.
-     * 
+     *
      * Percentile range goes from 0 to 100.
-     * 
+     *
      * If $values array is empty, this function will return null.
-     * 
+     *
      * If $value is lower than minimum then will return 0. If $value is higher to maximum then will return 100.
-     * 
+     *
      * @param array $values
      * Array of sample values.
      *
@@ -254,12 +258,12 @@ class Aggregations
      *
      * @return float|null
      */
-    public static function findPercentile(array $values, float $value, int $flags = self::PERCENTILE_FLAGS_FIRST)
+    public static function findPercentile(array $values, float $value, int $flags = self::PERCENTILE_FLAGS_MIDDLE)
     {
         if (empty($values)) {
             return null;
         }
-        if (($flags & self::PERCENTILE_FLAGS_UNIQUE)) {
+        if (Flags::match($flags, self::PERCENTILE_FLAGS_UNIQUE)) {
             $values = array_unique($values);
         }
         sort($values);
@@ -282,10 +286,17 @@ class Aggregations
 
         $diff = $values[$nextI] - $values[$lastI];
         $excess = $value - $values[$lastI];
-        $pct = ($flags & self::PERCENTILE_FLAGS_LAST) || $excess > 0 ?
-            $lastI / $countLess1 :
-            $firstI / $countLess1;
-        if ($value > $values[$lastI]) {
+        $pct = 0;
+        if ($excess > 0) {
+            $pct = $lastI / $countLess1;
+        } elseif (Flags::match($flags, self::PERCENTILE_FLAGS_MIDDLE)) {
+            $pct = ($firstI + $lastI) / 2 / $countLess1;
+        } elseif (Flags::match($flags, self::PERCENTILE_FLAGS_FIRST)) {
+            $pct = $firstI / $countLess1;
+        } elseif (Flags::match($flags, self::PERCENTILE_FLAGS_LAST)) {
+            $pct = $lastI / $countLess1;
+        }
+        if ($excess > 0) {
             $pct += $diff > 0 ? $excess / ($diff * $countLess1) : 0;
         }
         return $pct * 100;

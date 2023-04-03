@@ -110,25 +110,25 @@ class IndexTest extends TestCase
         ];
         $index = new Index($data, ['pk', 'fk']);
 
-        $this->assertEquals(7, $index->aggregate('count'));
+        $this->assertEquals(7.00, $index->aggregate('count'));
 
-        $this->assertEquals(3, $index->aggregate('min', 'amount'));
-        $this->assertEquals(12, $index->aggregate('max', 'amount'));
-        $this->assertEquals(57, $index->aggregate('array_sum', 'amount'));
+        $this->assertEquals(3.00, $index->aggregate('min', 'amount'));
+        $this->assertEquals(12.0, $index->aggregate('max', 'amount'));
+        $this->assertEquals(57.0, $index->aggregate('array_sum', 'amount'));
 
-        $this->assertEquals(8, $index->aggregate('min', 'seconds'));
-        $this->assertEquals(21, $index->aggregate('max', 'seconds'));
-        $this->assertEquals(95, $index->aggregate('array_sum', 'seconds'));
+        $this->assertEquals(8.00, $index->aggregate('min', 'seconds'));
+        $this->assertEquals(21.0, $index->aggregate('max', 'seconds'));
+        $this->assertEquals(95.0, $index->aggregate('array_sum', 'seconds'));
 
-        $this->assertEquals(5, $index->aggregate('min', 'amount', ['fk' => 1]));
-        $this->assertEquals(10, $index->aggregate('max', 'amount', ['fk' => 1]));
-        $this->assertEquals(3, $index->aggregate('count', 'amount', ['fk' => 1]));
-        $this->assertEquals(23, $index->aggregate('array_sum', 'amount', ['fk' => 1]));
+        $this->assertEquals(5.00, $index->aggregate('min', 'amount', ['fk' => 1]));
+        $this->assertEquals(10.0, $index->aggregate('max', 'amount', ['fk' => 1]));
+        $this->assertEquals(3.00, $index->aggregate('count', 'amount', ['fk' => 1]));
+        $this->assertEquals(23.0, $index->aggregate('array_sum', 'amount', ['fk' => 1]));
 
-        $this->assertEquals(3, $index->aggregate('min', 'amount', ['fk' => [1, 2]]));
-        $this->assertEquals(12, $index->aggregate('max', 'amount', ['fk' => [1, 2]]));
-        $this->assertEquals(5, $index->aggregate('count', 'amount', ['fk' => [1, 2]]));
-        $this->assertEquals(38, $index->aggregate('array_sum', 'amount', ['fk' => [1, 2]]));
+        $this->assertEquals(3.00, $index->aggregate('min', 'amount', ['fk' => [1, 2]]));
+        $this->assertEquals(12.0, $index->aggregate('max', 'amount', ['fk' => [1, 2]]));
+        $this->assertEquals(5.00, $index->aggregate('count', 'amount', ['fk' => [1, 2]]));
+        $this->assertEquals(38.0, $index->aggregate('array_sum', 'amount', ['fk' => [1, 2]]));
 
         // Filter that returns 0 items causes null. (Coalesce operator ?? handle this).
         $this->assertSame(null, $index->aggregate('min', 'amount', ['fk' => 4]));
@@ -138,12 +138,12 @@ class IndexTest extends TestCase
         // Accessing unknown column causes null.
         $this->assertSame(null, $index->aggregate('min', 'quantity'));
 
-        $this->assertEquals(3, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [0]));
-        $this->assertEquals(4.8, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [15]));
-        $this->assertEquals(6.5, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [25]));
-        $this->assertEquals(9, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [50]));
-        $this->assertEquals(10, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [75]));
+        $this->assertEquals(3.00, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [0]));
+        $this->assertEquals(4.80, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [15]));
+        $this->assertEquals(6.50, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [25]));
+        $this->assertEquals(9.00, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [50]));
+        $this->assertEquals(10.0, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [75]));
         $this->assertEquals(10.2, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [85]));
-        $this->assertEquals(12, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [100]));
+        $this->assertEquals(12.0, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [100]));
     }
 }

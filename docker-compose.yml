@@ -1,0 +1,35 @@
+version: '3'
+services:
+  php74:
+    build:
+      context: .
+      dockerfile: Dockerfile.php74
+    volumes:
+      - .:/app
+    command: >
+      sh -c "
+        composer install &&
+        phpunit -c phpunit9.xml
+      "
+  php80:
+    build:
+      context: .
+      dockerfile: Dockerfile.php80
+    volumes:
+      - .:/app
+    command: >
+      sh -c "
+        composer install &&
+        phpunit -c phpunit9.xml
+      "
+  php81:
+    build:
+      context: .
+      dockerfile: Dockerfile.php81
+    volumes:
+      - .:/app
+    command: >
+      sh -c "
+        composer install &&
+        phpunit -c phpunit10.xml
+      "

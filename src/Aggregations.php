@@ -231,9 +231,9 @@ class Aggregations
         $indexFloor = floor($index);
         $indexFraction = $index - $indexFloor;
 
-        $val = $values[$index];
+        $val = $values[$indexFloor];
         if ($indexFraction > 0) {
-            $val += $indexFraction * ($values[$index + 1] - $values[$index]);
+            $val += $indexFraction * ($values[$indexFloor + 1] - $values[$indexFloor]);
         }
         return $val;
     }

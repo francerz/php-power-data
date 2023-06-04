@@ -10,9 +10,9 @@ class IndexTest extends TestCase
 {
     private $index;
 
-    public function __construct()
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
-        parent::__construct();
+        parent::__construct($name, $data, $dataName);
         $this->index = new Index(array(
             ['col1' => 1, 'col2' => 1], # 0
             ['col1' => 2, 'col2' => 2], # 1

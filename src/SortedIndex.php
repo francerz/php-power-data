@@ -42,52 +42,63 @@ class SortedIndex implements Countable, Iterator, ArrayAccess
         $jumps = 0;
         return $this->binarySearch($value, $jumps) !== null;
     }
+
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->list);
     }
 
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return current($this->list);
     }
 
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return key($this->list);
     }
 
+    #[\ReturnTypeWillChange]
     public function next()
     {
         return next($this->list);
     }
 
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return key($this->list) !== null;
     }
 
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         return reset($this->list);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return $this->contains($offset);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->binarySearch($offset);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->list[$offset] = $value;
         $this->sorted = false;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->list[$offset]);

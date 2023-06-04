@@ -62,22 +62,31 @@ class Map implements Iterator
         unset($this->map[$key]);
     }
 
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         return reset($this->map);
     }
+
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return current($this->map);
     }
+
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return key($this->map);
     }
+
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return key($this->map) !== null;
     }
+
+    #[\ReturnTypeWillChange]
     public function next()
     {
         return next($this->map);

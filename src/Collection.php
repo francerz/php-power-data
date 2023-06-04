@@ -20,6 +20,8 @@ class Collection implements
         $this->data = $data;
     }
     #region \ArrayAccess implementation
+
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         if (isset($this->data[$offset])) {
@@ -30,6 +32,8 @@ class Collection implements
         }
         return false;
     }
+
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (is_array($offset)) {
@@ -44,6 +48,8 @@ class Collection implements
         }
         return;
     }
+    
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
@@ -55,6 +61,8 @@ class Collection implements
         }
         $this->data[$offset] = $value;
     }
+
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         if (!is_int($offset)) {
@@ -65,6 +73,7 @@ class Collection implements
     #endregion
 
     #region \Countable implementation
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->data);
@@ -72,22 +81,31 @@ class Collection implements
     #endregion
 
     #region \Iterator implementation
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return current($this->data);
     }
+
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return key($this->data);
     }
+
+    #[\ReturnTypeWillChange]
     public function next()
     {
         return next($this->data);
     }
+
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         return reset($this->data);
     }
+
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return key($this->data) !== null;

@@ -145,6 +145,7 @@ class Index implements ArrayAccess, Countable, Iterator
         return array_intersect_key($this->rows, array_flip($this->findAllKeys($filter)));
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         if (is_array($offset)) {
@@ -157,6 +158,7 @@ class Index implements ArrayAccess, Countable, Iterator
         return false;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (is_array($offset)) {
@@ -165,6 +167,7 @@ class Index implements ArrayAccess, Countable, Iterator
         return [];
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (!is_null($offset)) {
@@ -173,32 +176,43 @@ class Index implements ArrayAccess, Countable, Iterator
         $this->add($value);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         throw new Exception("Read only collection.");
     }
 
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->rows);
     }
 
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         return reset($this->rows);
     }
+
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return key($this->rows) !== null;
     }
+
+    #[\ReturnTypeWillChange]
     public function next()
     {
         return next($this->rows);
     }
+
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return key($this->rows);
     }
+
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return current($this->rows);

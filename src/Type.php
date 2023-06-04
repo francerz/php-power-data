@@ -215,7 +215,7 @@ class Type
         }
         return Type::forKey($type);
     }
-    final private static function ofArray(array $values)
+    private static function ofArray(array $values)
     {
         $types = [];
         foreach ($values as $val) {
@@ -229,7 +229,7 @@ class Type
      * @param array $types
      * @return Type
      */
-    final private static function getCommonTypeArray(array $types)
+    private static function getCommonTypeArray(array $types)
     {
         if (count($types) == 0) {
             return static::forKey('mixed');
@@ -252,7 +252,7 @@ class Type
      * @param array $type_keys
      * @return string
      */
-    final private static function getCommonType(array $type_keys)
+    private static function getCommonType(array $type_keys)
     {
         $map = static::$knownTypesTree->getMap(function ($node) {
             return $node->getValue()['type'];
@@ -282,7 +282,7 @@ class Type
      * @param array $types
      * @return array
      */
-    final private static function groupTypes(array $types)
+    private static function groupTypes(array $types)
     {
         $typeMap = [];
         foreach ($types as $type) {

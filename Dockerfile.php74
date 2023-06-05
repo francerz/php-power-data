@@ -1,9 +1,9 @@
 # Base image
-FROM php:7.4
+FROM php:7.4-cli
 
 # Install required dependencies
 RUN apt-get update && \
-    apt-get install -y wget
+    apt-get install -y wget zip unzip
 
 # Install Composer globally
 RUN wget https://getcomposer.org/installer -O composer-setup.php && \

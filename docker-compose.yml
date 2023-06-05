@@ -6,9 +6,10 @@ services:
       dockerfile: Dockerfile.php74
     volumes:
       - .:/app
+      - /app/vendor/
     command: >
       sh -c "
-        composer install &&
+        composer install --no-interaction > /dev/null 2>&1 &&
         phpunit -c phpunit9.xml
       "
   php80:
@@ -17,9 +18,10 @@ services:
       dockerfile: Dockerfile.php80
     volumes:
       - .:/app
+      - /app/vendor/
     command: >
       sh -c "
-        composer install &&
+        composer install --no-interaction > /dev/null 2>&1 &&
         phpunit -c phpunit9.xml
       "
   php81:
@@ -28,8 +30,21 @@ services:
       dockerfile: Dockerfile.php81
     volumes:
       - .:/app
+      - /app/vendor/
     command: >
       sh -c "
-        composer install &&
+        composer install --no-interaction > /dev/null 2>&1 &&
+        phpunit -c phpunit10.xml
+      "
+  php82:
+    build:
+      context: .
+      dockerfile: Dockerfile.php82
+    volumes:
+      - .:/app
+      - /app/vendor/
+    command: >
+      sh -c "
+        composer install --no-interaction > /dev/null 2>&1 &&
         phpunit -c phpunit10.xml
       "

@@ -2,7 +2,6 @@
 
 namespace Francerz\PowerData;
 
-
 /**
  * @deprecated v0.1.26
  */
@@ -10,6 +9,8 @@ class Tree
 {
     /** @var TreeNode|null */
     private $root;
+    /** @var Map */
+    private $index;
 
     public function __construct()
     {

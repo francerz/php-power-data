@@ -9,6 +9,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.HOME }}/.composer
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
     
     - name: Set up PHP
       uses: shivammathur/setup-php@v2

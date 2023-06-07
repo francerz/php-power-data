@@ -1,5 +1,17 @@
 version: '3'
 services:
+  php72:
+    build:
+      context: .
+      dockerfile: Dockerfile.php72
+    volumes:
+      - .:/app
+      - /app/vendor/
+    command: >
+      sh -c "
+        composer install --no-interaction > /dev/null 2>&1 &&
+        phpunit -c phpunit8.xml
+      "
   php74:
     build:
       context: .

@@ -1,6 +1,13 @@
-/.github            export-ignore
-/.vscode            export-ignore
-/tests              export-ignore
-/.gitattributes     export-ignore
-/.gitignore         export-ignore
-/phpunit.xml        export-ignore
+# Directories
+/.devcontainer          export-ignore
+/.docker                export-ignore
+/.github                export-ignore
+/.vscode                export-ignore
+/tests                  export-ignore
+
+# Files
+/.gitattributes         export-ignore
+/.gitignore             export-ignore
+/composer.lock          export-ignore
+/docker-compose.yml     export-ignore
+/phpunit*.xml           export-ignore

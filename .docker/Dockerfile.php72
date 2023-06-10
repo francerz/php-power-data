@@ -1,9 +1,9 @@
 # Base image
-FROM php:7.4-cli
+FROM php:7.2-cli
 
 # Install required dependencies
 RUN apt-get update && \
-    apt-get install -y wget zip unzip
+    apt-get install -y git wget zip unzip
 
 # Install Composer globally
 RUN wget https://getcomposer.org/installer -O composer-setup.php && \
@@ -11,9 +11,9 @@ RUN wget https://getcomposer.org/installer -O composer-setup.php && \
     rm composer-setup.php
 
 # Install PHPUnit globally
-RUN wget https://phar.phpunit.de/phpunit-9.phar && \
-    chmod +x phpunit-9.phar && \
-    mv phpunit-9.phar /usr/local/bin/phpunit
+RUN wget https://phar.phpunit.de/phpunit-8.phar && \
+    chmod +x phpunit-8.phar && \
+    mv phpunit-8.phar /usr/local/bin/phpunit
 
 # Container working directory
 WORKDIR /app

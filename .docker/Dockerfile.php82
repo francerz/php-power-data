@@ -3,7 +3,7 @@ FROM php:8.2-cli
 
 # Install required dependencies
 RUN apt-get update && \
-    apt-get install -y wget zip unzip
+    apt-get install -y git wget zip unzip
 
 # Install Composer globally
 RUN wget https://getcomposer.org/installer -O composer-setup.php && \

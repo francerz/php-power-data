@@ -3,7 +3,7 @@ services:
   php72:
     build:
       context: .
-      dockerfile: Dockerfile.php72
+      dockerfile: .docker/Dockerfile.php72
     volumes:
       - .:/app
       - /app/vendor/
@@ -15,7 +15,7 @@ services:
   php74:
     build:
       context: .
-      dockerfile: Dockerfile.php74
+      dockerfile: .docker/Dockerfile.php74
     volumes:
       - .:/app
       - /app/vendor/
@@ -27,7 +27,7 @@ services:
   php80:
     build:
       context: .
-      dockerfile: Dockerfile.php80
+      dockerfile: .docker/Dockerfile.php80
     volumes:
       - .:/app
       - /app/vendor/
@@ -39,7 +39,7 @@ services:
   php81:
     build:
       context: .
-      dockerfile: Dockerfile.php81
+      dockerfile: .docker/Dockerfile.php81
     volumes:
       - .:/app
       - /app/vendor/
@@ -51,7 +51,7 @@ services:
   php82:
     build:
       context: .
-      dockerfile: Dockerfile.php82
+      dockerfile: .docker/Dockerfile.php82
     volumes:
       - .:/app
       - /app/vendor/

@@ -1,6 +1,6 @@
 version: '3'
 services:
-  php72:
+  test-php7.2:
     build:
       context: .
       dockerfile: .docker/Dockerfile.php72
@@ -12,7 +12,7 @@ services:
         composer install --no-interaction > /dev/null 2>&1 &&
         phpunit -c phpunit8.xml
       "
-  php74:
+  test-php7.4:
     build:
       context: .
       dockerfile: .docker/Dockerfile.php74
@@ -24,7 +24,7 @@ services:
         composer install --no-interaction > /dev/null 2>&1 &&
         phpunit -c phpunit9.xml
       "
-  php80:
+  test-php8.0:
     build:
       context: .
       dockerfile: .docker/Dockerfile.php80
@@ -36,7 +36,7 @@ services:
         composer install --no-interaction > /dev/null 2>&1 &&
         phpunit -c phpunit9.xml
       "
-  php81:
+  test-php8.1:
     build:
       context: .
       dockerfile: .docker/Dockerfile.php81
@@ -48,7 +48,7 @@ services:
         composer install --no-interaction > /dev/null 2>&1 &&
         phpunit -c phpunit10.xml
       "
-  php82:
+  test-php8.2:
     build:
       context: .
       dockerfile: .docker/Dockerfile.php82

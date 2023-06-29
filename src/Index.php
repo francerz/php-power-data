@@ -228,10 +228,14 @@ class Index implements ArrayAccess, Countable, Iterator
         return $this->columns;
     }
 
-    public function getColumnValues(string $column)
+    public function getColumnValues(string $column, array $filter = null)
     {
         if (!array_key_exists($column, $this->indexes)) {
             return [];
+        }
+        if (isset($filter)) {
+            $rows = $this->findAll($filter);
+            return array_unique(array_column($rows, $column));
         }
         return array_unique(array_keys($this->indexes[$column]));
     }

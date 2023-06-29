@@ -42,8 +42,8 @@ class IndexTest extends TestCase
         $this->assertEquals([], array_values($index->findAllKeys(['col1' => 10])));
 
         $this->assertEquals([], array_values($index->findAllKeys(['col2' => 0])));
-        $this->assertEquals([0,3,7], array_values($index->findAllKeys(['col2' => 1])));
-        $this->assertEquals([1,2,6], array_values($index->findAllKeys(['col2' => 2])));
+        $this->assertEquals([0, 3, 7], array_values($index->findAllKeys(['col2' => 1])));
+        $this->assertEquals([1, 2, 6], array_values($index->findAllKeys(['col2' => 2])));
         $this->assertEquals([5], array_values($index->findAllKeys(['col2' => 3])));
         $this->assertEquals([4], array_values($index->findAllKeys(['col2' => 4])));
         $this->assertEquals([], array_values($index->findAllKeys(['col2' => 5])));
@@ -75,15 +75,16 @@ class IndexTest extends TestCase
         $this->assertEquals([3], array_values($index->findAllKeys(['col1' => 4])));
         $this->assertEquals([4], array_values($index->findAllKeys(['col1' => 5])));
 
-        $this->assertEquals([1,2,3,4,5], $index->getColumnValues('col1'));
+        $this->assertEquals([1, 2, 3, 4, 5], $index->getColumnValues('col1'));
 
         $index->addColumn('col2');
+        $this->assertEquals([2, 3], $index->getColumnValues('col1', ['col2' => 2]));
 
-        $this->assertEquals([0,3], array_values($index->findAllKeys(['col2' => 1])));
-        $this->assertEquals([1,2], array_values($index->findAllKeys(['col2' => 2])));
+        $this->assertEquals([0, 3], array_values($index->findAllKeys(['col2' => 1])));
+        $this->assertEquals([1, 2], array_values($index->findAllKeys(['col2' => 2])));
         $this->assertEquals([4], array_values($index->findAllKeys(['col2' => 3])));
 
-        $this->assertEquals([1,2,3], $index->getColumnValues('col2'));
+        $this->assertEquals([1, 2, 3], $index->getColumnValues('col2'));
         $this->assertEmpty($index->getColumnValues('col3'));
     }
 

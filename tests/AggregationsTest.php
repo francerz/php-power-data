@@ -14,6 +14,7 @@ class AggregationsTest extends TestCase
         $data = [4, 8, 15, 14, 2];
 
         $this->assertEquals(5, Aggregations::count($data));
+        $this->assertEquals(5, Aggregations::countDistinct($data));
         $this->assertEquals(43, Aggregations::sum($data));
         $this->assertEquals([], Aggregations::mode($data));
         $this->assertEquals(8.6, Aggregations::mean($data));
@@ -50,6 +51,7 @@ class AggregationsTest extends TestCase
         $data = [1, 1, 1, 2, 2, 2, 2, 4, 5, 5, 5, 8, 8];
 
         $this->assertEqualsWithDelta(13, Aggregations::count($data), self::FLOAT_DELTA);
+        $this->assertEqualsWithDelta(5, Aggregations::countDistinct($data), self::FLOAT_DELTA);
         $this->assertEqualsWithDelta(1, Aggregations::percentile($data, 0), self::FLOAT_DELTA);
         $this->assertEqualsWithDelta(8, Aggregations::percentile($data, 100), self::FLOAT_DELTA);
         $this->assertEqualsWithDelta(3, Aggregations::percentile($data, 54.16666666666), self::FLOAT_DELTA);

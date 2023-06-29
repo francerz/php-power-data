@@ -164,6 +164,9 @@ class Index implements ArrayAccess, Countable, Iterator
         if (is_array($offset)) {
             return $this->findAll($offset);
         }
+        if (is_int($offset) || is_string($offset)) {
+            return $this->rows[$offset] ?? null;
+        }
         return [];
     }
 
@@ -268,4 +271,30 @@ class Index implements ArrayAccess, Countable, Iterator
         $items = isset($column) ? array_column($items, $column) : $items;
         return empty($items) ? null : call_user_func($callback, $items, ...$moreArgs);
     }
+
+    public function first(?array $filter = null, ?string $column = null)
+    {
+        return $this->aggregate([Aggregations::class, 'first'], $column, $filter);
+    }
+
+    public function last(?array $filter = null, ?string $column = null)
+    {
+        return $this->aggregate([Aggregations::class, 'last'], $column, $filter);
+    }
+
+    public function xCount(?array $filter = null, ?string $column = null, bool $ignoreNulls = false)
+    {
+        return $this->aggregate([Aggregations::class, 'count'], $column, $filter, [$ignoreNulls]);
+    }
+
+    public function countDistinct(?array $filter = null, ?string $column = null, bool $ignoreNulls = false)
+    {
+        return $this->aggregate([Aggregations::class, 'countDistinct'], $column, $filter, [$ignoreNulls]);
+    }
+
+    public function sum(?string $column = null, ?array $filter = null)
+    {
+        return $this->aggregate([Aggregations::class, 'sum'], $column, $filter);
+    }
+
 }

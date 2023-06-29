@@ -26,6 +26,22 @@ class Aggregations
     }
 
     /**
+     * Counts items in array skipping duplicated values.
+     *
+     * @param array $values
+     * @param boolean $ignoreNulls
+     * @return int
+     */
+    public static function countDistinct(array $values, bool $ignoreNulls = false)
+    {
+        return $ignoreNulls ?
+            count(array_unique(array_filter($values, function ($v) {
+                return !is_null($v);
+            }))) :
+            count(array_unique($values));
+    }
+
+    /**
      * Sums every item in array.
      *
      * @param array $values

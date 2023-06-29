@@ -56,6 +56,18 @@ class IndexTest extends TestCase
         $this->assertEquals([0, 3, 4, 7], array_values($index->findAllKeys(['col2' => [1, 4]])));
 
         $this->assertEquals([8], array_values($index->findAllKeys(['col2' => null])));
+
+        $this->assertEquals(9, $index->xCount());
+        $this->assertEquals(0, $index->xCount(['col2' => 0]));
+        $this->assertEquals(3, $index->xCount(['col2' => 1]));
+        $this->assertEquals(3, $index->xCount(['col2' => 2]));
+        $this->assertEquals(1, $index->xCount(['col2' => 3]));
+        $this->assertEquals(1, $index->xCount(['col2' => 4]));
+        $this->assertEquals(0, $index->xCount(['col2' => 5]));
+        $this->assertEquals(1, $index->xCount(['col2' => null]));
+
+        $this->assertEquals(9, $index->xCount(null, 'col2'));
+        $this->assertEquals(8, $index->xCount(null, 'col2', true));
     }
 
     public function testMutableIndex()
@@ -79,6 +91,8 @@ class IndexTest extends TestCase
 
         $index->addColumn('col2');
         $this->assertEquals([2, 3], $index->getColumnValues('col1', ['col2' => 2]));
+        $this->assertEquals($index[0], $index->first());
+        $this->assertEquals($index[0], $index->first(['col2' => 1]));
 
         $this->assertEquals([0, 3], array_values($index->findAllKeys(['col2' => 1])));
         $this->assertEquals([1, 2], array_values($index->findAllKeys(['col2' => 2])));
@@ -86,6 +100,7 @@ class IndexTest extends TestCase
 
         $this->assertEquals([1, 2, 3], $index->getColumnValues('col2'));
         $this->assertEmpty($index->getColumnValues('col3'));
+
     }
 
     public function testGroupBy()

@@ -6,7 +6,7 @@ use ArrayAccess;
 use Countable;
 use Iterator;
 
-class SortedIndex implements Countable, Iterator, ArrayAccess
+class SortedIndex implements Countable, Iterator, ArrayAccess, ArrayableInterface
 {
     private $list;
     private $sorted = false;
@@ -18,13 +18,14 @@ class SortedIndex implements Countable, Iterator, ArrayAccess
     {
         $this->list = Arrays::fromIterable($list);
     }
+
     private function sort()
     {
         sort($this->list);
         $this->sorted = true;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         if (!$this->sorted) {
             $this->sort();
@@ -135,6 +136,7 @@ class SortedIndex implements Countable, Iterator, ArrayAccess
         }
         return null;
     }
+
     /**
      * @param SortedIndex[] $indexes
      */

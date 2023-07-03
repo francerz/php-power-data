@@ -261,7 +261,7 @@ class Arrays
     /**
      * Creates an array from given iterable.
      *
-     * @param iterable $iterable
+     * @param iterable|ArrayableInterface $iterable
      * @param boolean $keepKeys
      * @return array
      */
@@ -269,6 +269,10 @@ class Arrays
     {
         if (is_array($iterable)) {
             return $iterable;
+        }
+
+        if (is_object($iterable) && $iterable instanceof ArrayableInterface) {
+            return $iterable->toArray();
         }
 
         $array = [];

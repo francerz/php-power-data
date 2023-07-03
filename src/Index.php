@@ -118,17 +118,23 @@ class Index implements ArrayAccess, Countable, Iterator
             if (!isset($this->indexes[$k])) {
                 throw new LogicException("Missing '{$k}' filter index.");
             }
+
             $index = $this->indexes[$k];
-            if (is_scalar($v) || is_null($v)) {
-                $ks[] = isset($index[$v]) ? $index[$v] : SortedIndex::newEmpty();
+
+            if (is_array($v)) {
+                $idx = [];
+                foreach ($v as $val) {
+                    $data = isset($index[$val]) ? $index[$val]->toArray() : [];
+                    $idx = array_merge($idx, $data);
+                }
+                $ks[] = new SortedIndex($idx);
                 continue;
             }
-            $idx = [];
-            foreach ($v as $val) {
-                $data = isset($index[$val]) ? $index[$val]->toArray() : [];
-                $idx = array_merge($idx, $data);
+
+            if (!isset($index[$v])) {
+                return [];
             }
-            $ks[] = new SortedIndex($idx);
+            $ks[] = $index[$v];
         }
 
         if (count($ks) < 2) {

@@ -6,6 +6,7 @@ use ArrayAccess;
 use Countable;
 use Exception;
 use Iterator;
+use LogicException;
 
 class Index implements ArrayAccess, Countable, Iterator
 {
@@ -114,7 +115,10 @@ class Index implements ArrayAccess, Countable, Iterator
 
         $ks = [];
         foreach ($filter as $k => $v) {
-            $index = isset($this->indexes[$k]) ? $this->indexes[$k] : [];
+            if (!isset($this->indexes[$k])) {
+                throw new LogicException("Missing '{$k}' filter index.");
+            }
+            $index = $this->indexes[$k];
             if (is_scalar($v) || is_null($v)) {
                 $ks[] = isset($index[$v]) ? $index[$v] : SortedIndex::newEmpty();
                 continue;
@@ -124,7 +128,6 @@ class Index implements ArrayAccess, Countable, Iterator
                 $data = isset($index[$val]) ? $index[$val]->toArray() : [];
                 $idx = array_merge($idx, $data);
             }
-            sort($idx);
             $ks[] = new SortedIndex($idx);
         }
 

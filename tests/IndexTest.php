@@ -29,33 +29,33 @@ class IndexTest extends TestCase
     {
         $index = $this->index;
 
-        $this->assertEquals([], array_values($index->findAllKeys(['col1' => 0])));
-        $this->assertEquals([0], array_values($index->findAllKeys(['col1' => 1])));
-        $this->assertEquals([1], array_values($index->findAllKeys(['col1' => 2])));
-        $this->assertEquals([2], array_values($index->findAllKeys(['col1' => 3])));
-        $this->assertEquals([3], array_values($index->findAllKeys(['col1' => 4])));
-        $this->assertEquals([4], array_values($index->findAllKeys(['col1' => 5])));
-        $this->assertEquals([5], array_values($index->findAllKeys(['col1' => 6])));
-        $this->assertEquals([6], array_values($index->findAllKeys(['col1' => 7])));
-        $this->assertEquals([7], array_values($index->findAllKeys(['col1' => 8])));
-        $this->assertEquals([8], array_values($index->findAllKeys(['col1' => 9])));
-        $this->assertEquals([], array_values($index->findAllKeys(['col1' => 10])));
+        $this->assertEqualsCanonicalizing([], $index->findAllKeys(['col1' => 0]));
+        $this->assertEqualsCanonicalizing([0], $index->findAllKeys(['col1' => 1]));
+        $this->assertEqualsCanonicalizing([1], $index->findAllKeys(['col1' => 2]));
+        $this->assertEqualsCanonicalizing([2], $index->findAllKeys(['col1' => 3]));
+        $this->assertEqualsCanonicalizing([3], $index->findAllKeys(['col1' => 4]));
+        $this->assertEqualsCanonicalizing([4], $index->findAllKeys(['col1' => 5]));
+        $this->assertEqualsCanonicalizing([5], $index->findAllKeys(['col1' => 6]));
+        $this->assertEqualsCanonicalizing([6], $index->findAllKeys(['col1' => 7]));
+        $this->assertEqualsCanonicalizing([7], $index->findAllKeys(['col1' => 8]));
+        $this->assertEqualsCanonicalizing([8], $index->findAllKeys(['col1' => 9]));
+        $this->assertEqualsCanonicalizing([], $index->findAllKeys(['col1' => 10]));
 
-        $this->assertEquals([], array_values($index->findAllKeys(['col2' => 0])));
-        $this->assertEquals([0, 3, 7], array_values($index->findAllKeys(['col2' => 1])));
-        $this->assertEquals([1, 2, 6], array_values($index->findAllKeys(['col2' => 2])));
-        $this->assertEquals([5], array_values($index->findAllKeys(['col2' => 3])));
-        $this->assertEquals([4], array_values($index->findAllKeys(['col2' => 4])));
-        $this->assertEquals([], array_values($index->findAllKeys(['col2' => 5])));
+        $this->assertEqualsCanonicalizing([], $index->findAllKeys(['col2' => 0]));
+        $this->assertEqualsCanonicalizing([0, 3, 7], $index->findAllKeys(['col2' => 1]));
+        $this->assertEqualsCanonicalizing([1, 2, 6], $index->findAllKeys(['col2' => 2]));
+        $this->assertEqualsCanonicalizing([5], $index->findAllKeys(['col2' => 3]));
+        $this->assertEqualsCanonicalizing([4], $index->findAllKeys(['col2' => 4]));
+        $this->assertEqualsCanonicalizing([], $index->findAllKeys(['col2' => 5]));
 
-        $this->assertEquals([1], array_values($index->findAllKeys(['col1' => 2, 'col2' => 2])));
-        $this->assertEquals([2], array_values($index->findAllKeys(['col1' => 3, 'col2' => 2])));
-        $this->assertEquals([], array_values($index->findAllKeys(['col1' => 4,'col2' => 2])));
+        $this->assertEqualsCanonicalizing([1], $index->findAllKeys(['col1' => 2, 'col2' => 2]));
+        $this->assertEqualsCanonicalizing([2], $index->findAllKeys(['col1' => 3, 'col2' => 2]));
+        $this->assertEqualsCanonicalizing([], $index->findAllKeys(['col1' => 4,'col2' => 2]));
 
         // ADD multiple values column values
-        $this->assertEquals([0, 3, 4, 7], array_values($index->findAllKeys(['col2' => [1, 4]])));
+        $this->assertEqualsCanonicalizing([0, 3, 4, 7], $index->findAllKeys(['col2' => [1, 4]]));
 
-        $this->assertEquals([8], array_values($index->findAllKeys(['col2' => null])));
+        $this->assertEqualsCanonicalizing([8], $index->findAllKeys(['col2' => null]));
 
         $this->assertEquals(9, $index->xCount());
         $this->assertEquals(0, $index->xCount(['col2' => 0]));
@@ -81,22 +81,22 @@ class IndexTest extends TestCase
 
         $index->add(['col1' => 5, 'col2' => 3]); # 4
 
-        $this->assertEquals([0], array_values($index->findAllKeys(['col1' => 1])));
-        $this->assertEquals([1], array_values($index->findAllKeys(['col1' => 2])));
-        $this->assertEquals([2], array_values($index->findAllKeys(['col1' => 3])));
-        $this->assertEquals([3], array_values($index->findAllKeys(['col1' => 4])));
-        $this->assertEquals([4], array_values($index->findAllKeys(['col1' => 5])));
+        $this->assertEqualsCanonicalizing([0], $index->findAllKeys(['col1' => 1]));
+        $this->assertEqualsCanonicalizing([1], $index->findAllKeys(['col1' => 2]));
+        $this->assertEqualsCanonicalizing([2], $index->findAllKeys(['col1' => 3]));
+        $this->assertEqualsCanonicalizing([3], $index->findAllKeys(['col1' => 4]));
+        $this->assertEqualsCanonicalizing([4], $index->findAllKeys(['col1' => 5]));
 
-        $this->assertEquals([1, 2, 3, 4, 5], $index->getColumnValues('col1'));
+        $this->assertEqualsCanonicalizing([1, 2, 3, 4, 5], $index->getColumnValues('col1'));
 
         $index->addColumn('col2');
         $this->assertEquals([2, 3], $index->getColumnValues('col1', ['col2' => 2]));
         $this->assertEquals($index[0], $index->first());
         $this->assertEquals($index[0], $index->first(['col2' => 1]));
 
-        $this->assertEquals([0, 3], array_values($index->findAllKeys(['col2' => 1])));
-        $this->assertEquals([1, 2], array_values($index->findAllKeys(['col2' => 2])));
-        $this->assertEquals([4], array_values($index->findAllKeys(['col2' => 3])));
+        $this->assertEqualsCanonicalizing([0, 3], $index->findAllKeys(['col2' => 1]));
+        $this->assertEqualsCanonicalizing([1, 2], $index->findAllKeys(['col2' => 2]));
+        $this->assertEqualsCanonicalizing([4], $index->findAllKeys(['col2' => 3]));
 
         $this->assertEquals([1, 2, 3], $index->getColumnValues('col2'));
         $this->assertEmpty($index->getColumnValues('col3'));

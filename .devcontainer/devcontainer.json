@@ -13,7 +13,7 @@
 
 	// The 'service' property is the name of the service for the container that VS Code should
 	// use. Update this value and .devcontainer/docker-compose.yml to the real service name.
-	"service": "test-php7.4",
+	"service": "test-php8.0",
 
 	// The optional 'workspaceFolder' property is the path VS Code should open by default when
 	// connected. This is typically a file mount in .devcontainer/docker-compose.yml
@@ -39,7 +39,8 @@
 	,"customizations": {
 		"vscode": {
 			"extensions": [
-				"recca0120.vscode-phpunit"
+				"recca0120.vscode-phpunit",
+				"xdebug.php-debug"
 			],
 			"settings": {
 				"phpunit.phpunit": "/usr/local/bin/phpunit",

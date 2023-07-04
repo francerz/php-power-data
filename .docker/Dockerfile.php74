@@ -15,5 +15,16 @@ RUN wget https://phar.phpunit.de/phpunit-9.phar && \
     chmod +x phpunit-9.phar && \
     mv phpunit-9.phar /usr/local/bin/phpunit
 
+RUN wget https://xdebug.org/files/xdebug-3.1.6.tgz -O /tmp/xdebug.tgz
+RUN pecl install /tmp/xdebug.tgz
+RUN echo "zend_extension=xdebug.so" >> /usr/local/etc/php/php.ini
+
+RUN { \
+    echo "xdebug.mode=debug"; \
+    echo "xdebug.start_with_request=yes"; \
+    echo "xdebug.client_host=host.docker.internal"; \
+    echo "xdebug.client_port=9003"; \
+} > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini;
+
 # Container working directory
 WORKDIR /app

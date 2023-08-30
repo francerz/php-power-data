@@ -14,7 +14,7 @@ class SortedIndex implements Countable, Iterator, ArrayAccess, ArrayableInterfac
     /**
      * @param iterable $list
      */
-    public function __construct($list)
+    public function __construct($list = [])
     {
         $this->list = Arrays::fromIterable($list);
     }

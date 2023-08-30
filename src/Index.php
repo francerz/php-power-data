@@ -35,25 +35,25 @@ class Index implements ArrayAccess, Countable, Iterator
         }
         $idxCol = [];
         foreach ($this->rows as $k => $row) {
-            $row = (array)$row;
-            $v = array_key_exists($col, $row) ? $row[$col] : null;
-            $idxCol[$v] = $idxCol[$v] ?? new SortedIndex([]);
+            $row = (object)$row;
+            $v = $row->{$col} ?? null;
+            $idxCol[$v] = $idxCol[$v] ?? new SortedIndex();
             $idxCol[$v][$k] = $k;
         }
         $this->indexes[$col] = $idxCol;
     }
 
     /**
-     * @param array $row
+     * @param object $row
      * @param int $k
      * @param array &$indexes
      * @return void
      */
-    private function indexRow(array $row, $k, ?array &$indexes = null)
+    private function indexRow(object $row, $k, ?array &$indexes = null)
     {
         foreach ($this->columns as $col) {
-            $v = array_key_exists($col, $row) ? $row[$col] : null;
-            $indexes[$col][$v] = $indexes[$col][$v] ?? new SortedIndex([]);
+            $v = $row->{$col} ?? null;
+            $indexes[$col][$v] = $indexes[$col][$v] ?? new SortedIndex();
             $indexes[$col][$v][$k] = $k;
         }
     }
@@ -69,7 +69,7 @@ class Index implements ArrayAccess, Countable, Iterator
     {
         $indexes = array_fill_keys($this->columns, []);
         foreach ($this->rows as $k => $row) {
-            $this->indexRow((array)$row, $k, $indexes);
+            $this->indexRow((object)$row, $k, $indexes);
         }
         foreach ($indexes as &$col) {
             foreach ($col as &$v) {
@@ -93,7 +93,7 @@ class Index implements ArrayAccess, Countable, Iterator
         $this->rows[] = $item;
         $keys = array_keys($this->rows);
         $k = end($keys);
-        $row = (array)$item;
+        $row = (object)$item;
         $this->indexRow($row, $k, $this->indexes);
     }
 
@@ -305,5 +305,4 @@ class Index implements ArrayAccess, Countable, Iterator
     {
         return $this->aggregate([Aggregations::class, 'sum'], $column, $filter);
     }
-
 }

@@ -240,16 +240,18 @@ class Index implements ArrayAccess, Countable, Iterator
         return $this->columns;
     }
 
-    public function getColumnValues(string $column, array $filter = null)
+    public function getColumnValues(string $column, ?array $filter = null)
     {
-        if (!array_key_exists($column, $this->indexes)) {
-            return [];
-        }
+        $values = [];
         if (isset($filter)) {
             $rows = $this->findAll($filter);
-            return array_unique(array_column($rows, $column));
+            $values = array_column($rows, $column);
+        } elseif (array_key_exists($column, $this->indexes)) {
+            $values = array_keys($this->indexes[$column]);
+        } else {
+            $values = array_column($this->rows, $column);
         }
-        return array_unique(array_keys($this->indexes[$column]));
+        return array_unique($values);
     }
 
     public function groupBy(string $column)

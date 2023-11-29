@@ -251,7 +251,7 @@ class Index implements ArrayAccess, Countable, Iterator
         } else {
             $values = array_column($this->rows, $column);
         }
-        return array_unique($values);
+        return array_unique($values, SORT_REGULAR);
     }
 
     public function groupBy(string $column)

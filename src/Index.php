@@ -104,6 +104,8 @@ class Index implements ArrayAccess, Countable, Iterator
     }
 
     /**
+     * Finds all the keys(indexes) of records that matches with given filter.
+     *
      * @param array $filter
      * @return array
      */
@@ -254,13 +256,31 @@ class Index implements ArrayAccess, Countable, Iterator
         return array_unique($values, SORT_REGULAR);
     }
 
-    public function groupBy(string $column)
+    /**
+     * Groups all rows by the values in the given columns.
+     *
+     * @param string|string[] $columns
+     * @return array
+     */
+    public function groupBy($columns)
     {
-        $groups = [];
-        foreach ($this->getColumnValues($column) as $v) {
-            $groups[$v] = $this[[$column => $v]];
-        }
-        return $groups;
+        $columns = is_array($columns) ? $columns : [$columns];
+
+        $groupRecursive = function (array $filter, array $groupColumns) use (&$groupRecursive) {
+            if (empty($groupColumns)) {
+                return $this->offsetGet($filter);
+            }
+            $groupedResult = [];
+            $currentColumn = array_shift($groupColumns);
+            $columnValues = $this->getColumnValues($currentColumn, $filter);
+            foreach ($columnValues as $value) {
+                $newFilter = array_merge($filter, [$currentColumn => $value]);
+                $groupedResult[$value] = $groupRecursive($newFilter, $groupColumns);
+            }
+            return $groupedResult;
+        };
+
+        return $groupRecursive([], $columns);
     }
 
     /**

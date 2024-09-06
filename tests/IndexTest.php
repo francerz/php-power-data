@@ -162,4 +162,45 @@ class IndexTest extends TestCase
         $this->assertEquals(10.2, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [85]));
         $this->assertEquals(12.0, $index->aggregate([Aggregations::class, 'percentile'], 'amount', null, [100]));
     }
+
+    public function testMultiGroupBy()
+    {
+        $data = [
+            ['semester' => 'JAN-JUN 23', 'level' => 'bachelor', 'students_count' => 21, 'subject' => 'Databases'],
+            ['semester' => 'JAN-JUN 23', 'level' => 'bachelor', 'students_count' => 12, 'subject' => 'Programming'],
+            ['semester' => 'AGO-DEC 23', 'level' => 'master', 'students_count' => 10, 'subject' => 'Discrete Mathematics'],
+            ['semester' => 'JAN-JUN 23', 'level' => 'bachelor', 'students_count' => 32, 'subject' => 'Networks'],
+            ['semester' => 'JAN-JUN 23', 'level' => 'master', 'students_count' => 9, 'subject' => 'Artificial Intelligence'],
+            ['semester' => 'AGO-DEC 23', 'level' => 'bachelor', 'students_count' => 12, 'subject' => 'Web Development'],
+            ['semester' => 'JAN-JUN 23', 'level' => 'master', 'students_count' => 7, 'subject' => 'Knowledge Databases'],
+            ['semester' => 'AGO-DEC 23', 'level' => 'bachelor', 'students_count' => 18, 'subject' => 'Computer Security'],
+        ];
+
+        $index = new Index($data, ['semester', 'level']);
+        $actual = $index->groupBy(['semester', 'level']);
+
+        $expected = [
+            'JAN-JUN 23' => [
+                'bachelor' => [
+                    0 => ['semester' => 'JAN-JUN 23', 'level' => 'bachelor', 'students_count' => 21, 'subject' => 'Databases'],
+                    1 => ['semester' => 'JAN-JUN 23', 'level' => 'bachelor', 'students_count' => 12, 'subject' => 'Programming'],
+                    3 => ['semester' => 'JAN-JUN 23', 'level' => 'bachelor', 'students_count' => 32, 'subject' => 'Networks']
+                ],
+                'master' => [
+                    4 => ['semester' => 'JAN-JUN 23', 'level' => 'master', 'students_count' => 9, 'subject' => 'Artificial Intelligence'],
+                    6 => ['semester' => 'JAN-JUN 23', 'level' => 'master', 'students_count' => 7, 'subject' => 'Knowledge Databases']
+                ]
+            ],
+            'AGO-DEC 23' => [
+                'bachelor' => [
+                    5 => ['semester' => 'AGO-DEC 23', 'level' => 'bachelor', 'students_count' => 12, 'subject' => 'Web Development'],
+                    7 => ['semester' => 'AGO-DEC 23', 'level' => 'bachelor', 'students_count' => 18, 'subject' => 'Computer Security']
+                ],
+                'master' => [
+                    2 => ['semester' => 'AGO-DEC 23', 'level' => 'master', 'students_count' => 10, 'subject' => 'Discrete Mathematics']
+                ]
+            ]
+        ];
+        $this->assertEquals($expected, $actual);
+    }
 }

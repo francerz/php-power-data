@@ -34,7 +34,46 @@ foreach ($col1Values as $c1) {
 }
 ```
 
-### Aggregations
+### Method `groupBy($columns)`
+
+The `groupBy` method allows you to group records from an indexed dataset based
+on one or more column values. The grouping is performed incrementally, meaning
+that the method applies filters progressively on the existing index to avoid
+unnecesary memory and processing overhead. This ensures that the performance
+remains efficient, even with large datasets.
+
+#### Parameters:
+- `$columns` (string|array):
+  The name of a single column (string) or an array of column names (array) by
+  which the data should be grouped. The method will return a nested grouping if
+  multiple columns are provided.
+
+#### Returns:
+- **array**:
+  Returns a nested associative array, where each key corresponds to the unique
+  values in the specified columns. The innermost arrays contain the records that
+  match teh specific grouping of column values.
+
+#### How it works:
+The methods does not create a new index fore each group. Instead, progressively
+filters the data of each column's unique values, grouping the results step by
+step. This approach reduces memory consumption and processing time by avoiding
+redundant operations on the dataset.
+
+#### Example Usage:
+```php
+$index = new Index($data, ['country', 'city']);
+
+// Group by a single column
+$groupedByCity = $index->groupBy('city');
+
+// Group by multiple columns
+$groupedByCountryAndCity = $index->groupBy(['country', 'city']);
+
+print_r($groupedByCity);
+```
+
+## Aggregations
 
 ```php
 Aggregations::concat(array $values, $separator = '')
@@ -53,7 +92,7 @@ Aggregations::product(array $values, bool $ignoreEmpty = false)
 Aggregations::sum(array $values)
 ```
 
-### Arrays
+## Arrays
 
 ```php
 Arrays::hasNumericKeys(array $array)

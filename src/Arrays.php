@@ -238,22 +238,29 @@ class Arrays
     }
 
     /**
+     * Replaces the array keys with new keys given in the same order.
      * @param array $array
      * @param array $keys
      * @param array|null $newKeys
-     * @return void
+     * @return array
+     * 
+     * @throws LogicException If key pairs does not match.
      */
     public static function replaceKeys(array $array, array $keys, $newKeys = null)
     {
+        if (empty($array)) {
+            return [];
+        }
+
         if (isset($newKeys) && count($keys) != count($newKeys)) {
             throw new LogicException('Params $keys and $newKeys must have same length.');
         }
 
-        $keys = isset($newKeys) ? array_combine($keys, $newKeys) : $keys;
+        $keyMap = isset($newKeys) ? array_combine($keys, $newKeys) : array_combine($keys, $keys);
 
         $new = [];
-        foreach ($keys as $k => $n) {
-            $new[$n] = array_key_exists($k, $array) ? $array[$k] : null;
+        foreach ($keyMap as $oldKey => $newKey) {
+            $new[$newKey] = array_key_exists($oldKey, $array) ? $array[$oldKey] : null;
         }
         return $new;
     }

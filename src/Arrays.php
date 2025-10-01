@@ -243,7 +243,7 @@ class Arrays
      * @param array $keys
      * @param array|null $newKeys
      * @return array
-     * 
+     *
      * @throws LogicException If key pairs does not match.
      */
     public static function replaceKeys(array $array, array $keys, $newKeys = null)
@@ -252,11 +252,16 @@ class Arrays
             return [];
         }
 
-        if (isset($newKeys) && count($keys) != count($newKeys)) {
+        if (!isset($newKeys)) {
+            $newKeys = array_values($keys);
+            $keys = array_keys($keys);
+        }
+
+        if (count($keys) != count($newKeys)) {
             throw new LogicException('Params $keys and $newKeys must have same length.');
         }
 
-        $keyMap = isset($newKeys) ? array_combine($keys, $newKeys) : array_combine($keys, $keys);
+        $keyMap = array_combine($keys, $newKeys);
 
         $new = [];
         foreach ($keyMap as $oldKey => $newKey) {
